@@ -1,13 +1,13 @@
 package com.monopoly.domain.engine.card;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.UUID;
 
-@Setter
-@Getter
+@Data
 @AllArgsConstructor
 public class Card implements Id {
     private final UUID id;

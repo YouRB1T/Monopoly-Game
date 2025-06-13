@@ -3,9 +3,7 @@ package com.monopoly.domain.engine;
 import com.monopoly.domain.engine.card.Card;
 import com.monopoly.domain.engine.card.Id;
 import com.monopoly.domain.engine.card.Prisoned;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 import java.util.UUID;
@@ -13,6 +11,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Player implements Id, Prisoned {
     private final UUID id;
     private String name;

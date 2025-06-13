@@ -3,7 +3,7 @@ package com.monopoly.service;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.card.Card;
 import com.monopoly.domain.engine.Player;
-import com.monopoly.domain.engine.card.PricedCard;
+import com.monopoly.domain.engine.card.IPrice;
 import com.monopoly.domain.engine.card.PropertyCard;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class PlayerService {
         return player.getPlayerCards().contains(card);
     }
 
-    public static void sellCard(PricedCard card, Player player) {
+    public static void sellCard(IPrice card, Player player) {
         player.getPlayerCards().remove(card);
         player.setTotalMoneys(player.getTotalMoneys() + card.getPrice());
         player.setMoneys(player.getMoneys() + card.getPrice());

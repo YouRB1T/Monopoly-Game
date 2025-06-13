@@ -1,13 +1,17 @@
 package com.monopoly.domain.engine.card;
 
 import com.monopoly.domain.engine.enums.TreasuryCardType;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class TreasuryCard extends Card implements ITreasury{
 
     private TreasuryCardType type;

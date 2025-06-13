@@ -2,8 +2,7 @@ package com.monopoly.domain.engine.card;
 
 import com.monopoly.domain.engine.Player;
 import com.monopoly.engine.handler.card.CardHandler;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class PropertyCard extends BoardCard implements IOwner, IPrice, IRent, IPropertyGroup {
     private final Integer price;
     private final RentOfCard rentOfCard;

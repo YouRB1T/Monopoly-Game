@@ -4,13 +4,18 @@ import com.monopoly.domain.engine.Board;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.Card;
+import com.monopoly.repository.GameSessionRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
 
-@RequiredArgsConstructor
 public class GameSessionMapper {
     private final GameSession gameSession;
+    private GameSessionRepository repository;
+
+    public GameSessionMapper(UUID gameSession) {
+        this.gameSession = ;
+    }
 
     public Player getPLayerById(UUID playerId) {
         return gameSession.getPlayers().stream()

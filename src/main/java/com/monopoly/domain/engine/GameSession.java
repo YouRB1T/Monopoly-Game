@@ -3,9 +3,7 @@ package com.monopoly.domain.engine;
 import com.monopoly.domain.engine.card.PropertyCard;
 import com.monopoly.domain.engine.card.PropertyGroup;
 import com.monopoly.domain.engine.enums.GameStatus;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +12,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class GameSession {
     private final UUID id;
     private final List<Board> boards;

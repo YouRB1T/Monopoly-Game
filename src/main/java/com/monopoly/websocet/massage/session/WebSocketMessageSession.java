@@ -2,13 +2,9 @@ package com.monopoly.websocet.massage.session;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.monopoly.websocet.massage.lobby.CloseLobbyMessage;
-import com.monopoly.websocet.massage.lobby.CreateLobbyMessage;
-import com.monopoly.websocet.massage.lobby.ExcludeLobbyMessage;
-import com.monopoly.websocet.massage.lobby.JoinLobbyMessage;
+import com.monopoly.websocet.massage.WebSocketMessage;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -18,7 +14,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = EndGameMessage.class, name = "END_GAME"),
         @JsonSubTypes.Type(value = GameHandlerMessage.class, name = "HANDLE_EVENT")
 })
-public abstract class WebSocketMessageSession {
+public abstract class WebSocketMessageSession extends WebSocketMessage {
     private UUID sessionId;
-    private Long timestamp = System.currentTimeMillis();
+
 }

@@ -1,11 +1,17 @@
 package com.monopoly.domain.engine.card;
 
 import com.monopoly.engine.handler.card.CardHandler;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.UUID;
 
-public class BoardCard extends Card implements IPosition, IHandlers{
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class BoardCard extends Card implements IPosition, IHandlers {
     private final List<CardHandler> cardHandlers;
     private final Integer cardPosition;
 
@@ -15,7 +21,6 @@ public class BoardCard extends Card implements IPosition, IHandlers{
         this.cardHandlers = cardHandlers;
         this.cardPosition = cardPosition;
     }
-
 
     @Override
     public Integer getPosition() {

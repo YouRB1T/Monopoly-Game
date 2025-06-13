@@ -2,6 +2,7 @@ package com.monopoly.websocet.massage.lobby;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.monopoly.websocet.massage.WebSocketMessage;
 import lombok.Data;
 
 import java.util.UUID;
@@ -14,7 +15,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = CloseLobbyMessage.class, name = "CLOSE_LOBBY"),
         @JsonSubTypes.Type(value = ExcludeLobbyMessage.class, name = "EXCLUDE_LOBBY")
 })
-public abstract class WebSocketMessageLobby {
+public abstract class WebSocketMessageLobby extends WebSocketMessage {
     private UUID lobbyId;
     private Long timestamp = System.currentTimeMillis();
 }

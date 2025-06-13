@@ -1,14 +1,13 @@
 package com.monopoly.domain.engine;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class SessionHistory {
     private final List<String> historyHandlers;
 }
