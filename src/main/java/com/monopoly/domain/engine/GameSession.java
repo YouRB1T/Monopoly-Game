@@ -5,6 +5,7 @@ import com.monopoly.domain.engine.card.PropertyGroup;
 import com.monopoly.domain.engine.enums.GameStatus;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -14,7 +15,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class GameSession {
+public class GameSession implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final UUID id;
     private final List<Board> boards;
     private final List<Player> players;
