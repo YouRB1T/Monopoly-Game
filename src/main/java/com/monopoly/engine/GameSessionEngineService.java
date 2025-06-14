@@ -25,8 +25,7 @@ public class GameSessionEngineService implements GameSessionEngine {
     private final GameSessionRedisRepository gameSessionRepository;
 
     @Override
-    public DtoHandlerResponse handleGameEvent(DtoHandlerRequest dtoRequest) {
-        IDtoCardHandlerRequest request = dtoRequest.getRequest();
+    public DtoHandlerResponse handleGameEvent(DtoHandlerRequest request) {
 
         CardHandler handler = handlerMap.get(request.getClass());
         if (handler == null) {
