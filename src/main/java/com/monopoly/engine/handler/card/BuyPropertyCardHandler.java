@@ -1,5 +1,7 @@
 package com.monopoly.engine.handler.card;
 
+import com.monopoly.domain.dto.request.card.DtoBuyPropertyRequest;
+import com.monopoly.domain.dto.response.card.DtoBayPropertyResponse;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.*;
@@ -10,13 +12,15 @@ import lombok.Setter;
 import java.util.List;
 
 @Setter
-public class BuyPropertyCardHandler implements CardHandler{
+public class BuyPropertyCardHandler implements CardHandler<DtoBayPropertyResponse, DtoBuyPropertyRequest>{
 
-    private Player player;
-    private PropertyCard card;
 
     @Override
-    public void handle(GameSession gameSession) {
+    public DtoBayPropertyResponse handle(DtoBuyPropertyRequest request) {
+        Player player = request.getPlayer();
+        PropertyCard card = request.getCard();
+        GameSession gameSession = request.getGameSession();
+
         if (PropertyCardService.isPropertyOwned(gameSession, card)) {
             throw new IllegalStateException("Карта уже принадлежит другому игроку");
         }
@@ -24,6 +28,7 @@ public class BuyPropertyCardHandler implements CardHandler{
         if (player.getMoneys() < card.getPrice()) {
             throw new IllegalStateException("Недостаточно средств для покупки карты");
         }
+
         PlayerService.subMoneys(player, card.getPrice());
         player.getPlayerCards().add(card);
         gameSession.getPropertyCardOwners().put(card, player);
@@ -31,6 +36,7 @@ public class BuyPropertyCardHandler implements CardHandler{
             appLevelForGroup(gameSession, card.getGroup());
         }
 
+        return new DtoBayPropertyResponse(gameSession, player);
     }
 
     private boolean hasPropertyGroup(Player player, PropertyGroup group) {
@@ -59,7 +65,8 @@ public class BuyPropertyCardHandler implements CardHandler{
     }
 
     @Override
-    public boolean canHandle(GameSession gameSession) {
-        return !PropertyCardService.isPropertyOwned(gameSession, card) && player.getMoneys() > card.getPrice();
+    public boolean canHandle(DtoBuyPropertyRequest request) {
+        return !PropertyCardService.isPropertyOwned(request.getGameSession(), request.getCard())
+                && request.getPlayer().getMoneys() > request.getCard().getPrice();
     }
 }

@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.monopoly.websocet.massage.WebSocketMessage;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
@@ -16,5 +18,4 @@ import java.util.UUID;
 })
 public abstract class WebSocketMessageSession extends WebSocketMessage {
     private UUID sessionId;
-
 }

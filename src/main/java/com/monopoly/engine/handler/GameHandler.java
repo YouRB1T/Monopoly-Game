@@ -1,7 +1,5 @@
 package com.monopoly.engine.handler;
 
-import com.monopoly.domain.engine.GameSession;
-
-public interface GameHandler {
-    boolean canHandle(GameSession gameSession);
+public interface GameHandler<R> {
+    boolean canHandle(R request);
 }

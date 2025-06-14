@@ -1,30 +1,41 @@
 package com.monopoly.engine.handler.card;
 
+import com.monopoly.domain.dto.request.DtoHandlerRequest;
+import com.monopoly.domain.dto.request.card.DtoUpgradePropertyRequest;
+import com.monopoly.domain.dto.response.DtoHandlerResponse;
+import com.monopoly.domain.dto.response.card.DtoUpgradePropertyResponse;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.card.PropertyCard;
 import com.monopoly.service.PropertyCardService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+import static java.rmi.server.LogStream.log;
+
+@Slf4j
 @RequiredArgsConstructor
 @Setter
-public class UpgradePropertyHandler implements CardHandler {
-    private PropertyCard propertyCard;
-    private Integer newLevel;
+public class UpgradePropertyHandler implements CardHandler<DtoUpgradePropertyResponse, DtoUpgradePropertyRequest> {
 
     @Override
-    public void handle(GameSession gameSession) {
+    public DtoUpgradePropertyResponse handle(DtoUpgradePropertyRequest request) {
+        PropertyCard propertyCard = request.getPropertyCard();
+        Integer newLevel = request.getNewLevel();
+
         if (!PropertyCardService.canUpgradeProperty(propertyCard, newLevel)) {
             throw new IllegalStateException("Карта не может быть улучшена");
         }
 
         PropertyCardService.upgradeProperty(propertyCard, newLevel);
 
-        System.out.println("Карта " + propertyCard.getTitle() + " была улучшена");
+        log("Карта " + propertyCard.getTitle() + " была улучшена до уровня" + newLevel);
+
+        return new DtoUpgradePropertyResponse(request.getGameSession(), propertyCard, newLevel);
     }
 
     @Override
-    public boolean canHandle(GameSession gameSession) {
-        return PropertyCardService.canUpgradeProperty(propertyCard, newLevel);
+    public boolean canHandle(DtoUpgradePropertyRequest request) {
+        return PropertyCardService.canUpgradeProperty(request.getPropertyCard(), request.getNewLevel());
     }
 }

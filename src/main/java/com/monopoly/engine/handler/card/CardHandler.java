@@ -1,8 +1,8 @@
 package com.monopoly.engine.handler.card;
 
-import com.monopoly.domain.engine.GameSession;
 import com.monopoly.engine.handler.GameHandler;
 
-public interface CardHandler extends GameHandler {
-    void handle(GameSession gameSession);
+public interface CardHandler<DtoHandlerResponse extends com.monopoly.domain.dto.response.DtoHandlerResponse,
+        DtoHandlerRequest extends com.monopoly.domain.dto.request.DtoHandlerRequest> extends GameHandler<DtoHandlerRequest> {
+    DtoHandlerResponse handle(DtoHandlerRequest request);
 }

@@ -1,4 +1,4 @@
 package com.monopoly.domain.dto.request;
 
-public interface DtoHandlerRquest {
+public class DtoNewGameSessionRequest {
 }

@@ -1,24 +1,28 @@
 package com.monopoly.engine.handler.card;
 
+import com.monopoly.domain.dto.request.DtoHandlerRequest;
+import com.monopoly.domain.dto.request.card.DtoStartCardMoveRequest;
+import com.monopoly.domain.dto.response.DtoHandlerResponse;
+import com.monopoly.domain.dto.response.card.DtoStartCardMoveResponse;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.service.PlayerService;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class StartCardMoveHandler implements CardHandler{
-    private Player player;
-    private final Integer REWORD_FOR_CIRCLE;
+public class StartCardMoveHandler implements CardHandler<DtoStartCardMoveResponse, DtoStartCardMoveRequest>{
 
-    public StartCardMoveHandler(Integer rewordForCircle) {
-        REWORD_FOR_CIRCLE = rewordForCircle;
+    @Autowired
+    private PlayerService playerService;
+
+    @Override
+    public DtoStartCardMoveResponse handle(DtoStartCardMoveRequest request) {
+        playerService.addMoneys(request.getPlayer(), request.getRewordForCircle());
+        return new DtoStartCardMoveResponse(request.getGameSession(), request.getPlayer(),
+                request.getRewordForCircle());
     }
 
     @Override
-    public void handle(GameSession gameSession) {
-        PlayerService.addMoneys(player, REWORD_FOR_CIRCLE);
-    }
-
-    @Override
-    public boolean canHandle(GameSession gameSession) {
+    public boolean canHandle(DtoStartCardMoveRequest request) {
         return true;
     }
 }

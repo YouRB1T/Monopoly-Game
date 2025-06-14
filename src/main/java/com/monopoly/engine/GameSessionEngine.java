@@ -1,8 +1,8 @@
 package com.monopoly.engine;
 
-import com.monopoly.domain.dto.request.DtoHandlerRquest;
+import com.monopoly.domain.dto.request.DtoHandlerRequest;
 import com.monopoly.domain.dto.response.DtoHandlerResponse;
 
 public interface GameSessionEngine {
-    DtoHandlerResponse handleEvent(DtoHandlerRquest request);
+    DtoHandlerResponse handleGameEvent(DtoHandlerRequest request);
 }

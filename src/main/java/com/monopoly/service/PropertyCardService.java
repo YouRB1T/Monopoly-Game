@@ -12,7 +12,6 @@ public class PropertyCardService {
             session.getPropertyCardOwners().remove(card);
         }
         session.getPropertyCardOwners().put(card, to);
-        card.setOwner(to);
     }
 
     public static boolean isPropertyOwned(GameSession session, PropertyCard card) {

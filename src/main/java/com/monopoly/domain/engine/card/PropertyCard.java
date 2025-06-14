@@ -12,11 +12,10 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class PropertyCard extends BoardCard implements IOwner, IPrice, IRent, IPropertyGroup {
+public class PropertyCard extends BoardCard implements IPrice, IRent, IPropertyGroup {
     private final Integer price;
     private final RentOfCard rentOfCard;
     private final String propertyGroup;
-    private Player owner;
 
     public PropertyCard(UUID id, String title, String description, List<CardHandler> cardHandlers,
                         Integer cardPosition, Integer price, RentOfCard rentOfCard,
@@ -25,17 +24,11 @@ public class PropertyCard extends BoardCard implements IOwner, IPrice, IRent, IP
         this.price = price;
         this.rentOfCard = rentOfCard;
         this.propertyGroup = propertyGroup;
-        this.owner = owner;
     }
 
     @Override
     public Integer getPrice() {
         return price;
-    }
-
-    @Override
-    public Player getOwner() {
-        return owner;
     }
 
     @Override
