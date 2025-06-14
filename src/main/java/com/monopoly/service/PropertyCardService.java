@@ -3,7 +3,9 @@ package com.monopoly.service;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.PropertyCard;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PropertyCardService {
     public static void transferProperty(GameSession session, PropertyCard card, Player from, Player to) {
         if (from != null) {

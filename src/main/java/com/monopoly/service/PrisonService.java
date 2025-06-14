@@ -6,7 +6,9 @@ import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.Prisoned;
 import com.monopoly.domain.engine.card.BoardCard;
 import com.monopoly.domain.engine.card.special.PrisonCard;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PrisonService {
     public static boolean isInPrison(Player player, PrisonCard prisonCard) {
         return player.isInPrison() && prisonCard.getInPrisonPLayers().contains(player);

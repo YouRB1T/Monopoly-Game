@@ -5,11 +5,13 @@ import com.monopoly.domain.engine.card.Card;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.IPrice;
 import com.monopoly.domain.engine.card.PropertyCard;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Service
 public class PlayerService {
     public static void deleteCard(Card card, Player player) {
         player.getPlayerCards().remove(card);

@@ -11,7 +11,7 @@ public interface ActiveGameSessionRepository {
 
     Optional<GameSession> findById(UUID id);
 
-    boolean deleteById(UUID id);
+    GameSession deleteById(UUID id);
 
     boolean existsByID(UUID id);
 }

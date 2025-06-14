@@ -2,10 +2,11 @@ package com.monopoly.service;
 
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@Service
 public class GameSessionService {
     public static void transferMoney(Player from, Player to, Integer amount) {
         if (from.getMoneys() < amount) {

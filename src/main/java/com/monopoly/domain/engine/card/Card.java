@@ -1,9 +1,8 @@
 package com.monopoly.domain.engine.card;
 
+import com.monopoly.domain.engine.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.UUID;
 

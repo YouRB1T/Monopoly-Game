@@ -16,7 +16,6 @@ import java.util.UUID;
 @EqualsAndHashCode
 @ToString
 public class GameSession implements Serializable {
-    private static final long serialVersionUID = 1L;
     private final UUID id;
     private final List<Board> boards;
     private final List<Player> players;

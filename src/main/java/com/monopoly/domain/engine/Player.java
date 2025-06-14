@@ -1,7 +1,6 @@
 package com.monopoly.domain.engine;
 
 import com.monopoly.domain.engine.card.Card;
-import com.monopoly.domain.engine.card.Id;
 import com.monopoly.domain.engine.card.Prisoned;
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.monopoly.domain.engine.card;
+package com.monopoly.domain.engine;
 
 import java.util.UUID;
 

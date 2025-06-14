@@ -1,7 +1,6 @@
 package com.monopoly.repository;
 
 import com.monopoly.domain.engine.GameSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
-import static sun.net.www.protocol.http.AuthenticatorKeys.getKey;
 
 @Repository
 public class GameSessionRedisRepository implements ActiveGameSessionRepository{
@@ -29,22 +27,26 @@ public class GameSessionRedisRepository implements ActiveGameSessionRepository{
 
     @Override
     public GameSession create(GameSession gameSession) {
-        ops.set(getKey(gameSession.getId()), gameSession);
+        ops.set(buildKey(gameSession.getId()), gameSession);
         return gameSession;
     }
 
     @Override
     public Optional<GameSession> findById(UUID id) {
-        return ops.get(id);
+        return Optional.ofNullable(ops.get(buildKey(id)));
     }
 
     @Override
-    public boolean deleteById(UUID id) {
-        return false;
+    public GameSession deleteById(UUID id) {
+        GameSession gameSession = ops.get(buildKey(id));
+        redisTemplate.delete(buildKey(id));
+        return gameSession;
     }
 
     @Override
     public boolean existsByID(UUID id) {
-        return false;
+        return Boolean.TRUE.equals(
+                redisTemplate.hasKey(buildKey(id))
+        );
     }
 }
