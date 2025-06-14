@@ -4,15 +4,17 @@ import com.monopoly.domain.engine.Board;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.Card;
+import com.monopoly.repository.GameSessionRedisRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class GameSessionMapper {
     private final GameSession gameSession;
-    private GameSessionRepository repository;
 
-    public GameSessionMapper(UUID gameSession) {
-        this.gameSession = ;
+    public GameSessionMapper(GameSession gameSession) {
+        this.gameSession = gameSession;
     }
 
     public Player getPLayerById(UUID playerId) {

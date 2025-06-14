@@ -1,4 +1,6 @@
 package com.monopoly.domain.dto.response.card;
 
-public interface IDtoCardHandlerResponse {
+import com.monopoly.domain.dto.response.DtoHandlerResponse;
+
+public interface IDtoCardHandlerResponse extends DtoHandlerResponse {
 }

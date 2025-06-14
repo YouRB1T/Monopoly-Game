@@ -9,6 +9,6 @@ import java.util.UUID;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class StartGameMessage extends WebSocketMessageSession {
-    private UUID lobbyId;
+    private boolean isClassic;
     private Map<String, Object> initialGameState;
 }

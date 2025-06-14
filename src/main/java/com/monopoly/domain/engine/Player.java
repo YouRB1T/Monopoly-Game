@@ -23,6 +23,13 @@ public class Player implements Id, Prisoned {
     private Integer prisonTurns;
     private Integer freePrisonCards;
 
+    public Player(String name, UUID id, Integer moneys, Set<Card> playerCards) {
+        this.name = name;
+        this.id = id;
+        this.moneys = moneys;
+        this.playerCards = playerCards;
+    }
+
     @Override
     public UUID getId() {
         return id;
