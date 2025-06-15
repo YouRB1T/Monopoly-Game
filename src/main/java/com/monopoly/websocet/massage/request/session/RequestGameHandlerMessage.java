@@ -1,4 +1,4 @@
-package com.monopoly.websocet.massage.session;
+package com.monopoly.websocet.massage.request.session;
 
 import com.monopoly.domain.engine.enums.HandleType;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class GameHandlerMessage extends WebSocketMessageSession {
+public class RequestGameHandlerMessage extends RequestWebSocketMessageSession {
     private HandleType handleType;
     private Map<String, Object> eventData;
 }

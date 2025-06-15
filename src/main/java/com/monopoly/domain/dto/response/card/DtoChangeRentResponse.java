@@ -11,9 +11,4 @@ public class DtoChangeRentResponse implements IDtoCardHandlerResponse{
     private GameSession gameSession;
     private PropertyCard propertyCard;
     private Integer newRentLevel;
-
-    @Override
-    public GameSession getGameSession() {
-        return gameSession;
-    }
 }

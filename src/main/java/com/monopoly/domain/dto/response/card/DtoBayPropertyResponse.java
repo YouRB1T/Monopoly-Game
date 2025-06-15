@@ -2,18 +2,16 @@ package com.monopoly.domain.dto.response.card;
 
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
+import com.monopoly.domain.engine.card.Card;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class DtoBayPropertyResponse implements IDtoCardHandlerResponse{
     private GameSession gameSession;
     private Player player;
-
-
-    @Override
-    public GameSession getGameSession() {
-        return gameSession;
-    }
+    private List<Card> updatedPropertyCard;
 }

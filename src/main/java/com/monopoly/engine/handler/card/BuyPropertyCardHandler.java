@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -22,6 +23,7 @@ public class BuyPropertyCardHandler implements CardHandler<DtoBayPropertyRespons
 
     @Override
     public DtoBayPropertyResponse handle(DtoBuyPropertyRequest request) {
+        List<Card> updated = new ArrayList<>();
         Player player = request.getPlayer();
         PropertyCard card = request.getCard();
         GameSession gameSession = request.getGameSession();
@@ -37,11 +39,12 @@ public class BuyPropertyCardHandler implements CardHandler<DtoBayPropertyRespons
         playerService.subMoneys(player, card.getPrice());
         player.getPlayerCards().add(card);
         gameSession.getPropertyCardOwners().put(card, player);
+        updated.add(card);
         if (hasPropertyGroup(player, gameSession.getPropertyGroups().get(card.getGroup()))) {
-            appLevelForGroup(gameSession, card.getGroup());
+            appLevelForGroup(gameSession, card.getGroup(), updated);
         }
 
-        return new DtoBayPropertyResponse(gameSession, player);
+        return new DtoBayPropertyResponse(gameSession, player, updated);
     }
 
     @Override
@@ -66,10 +69,11 @@ public class BuyPropertyCardHandler implements CardHandler<DtoBayPropertyRespons
         return true;
     }
 
-    private void appLevelForGroup(GameSession gameSession, String group) {
+    private void appLevelForGroup(GameSession gameSession, String group, List<Card> updated) {
         gameSession.getPropertyGroups().get(group).getPropertyCards().stream().forEach(propertyCard -> {
             if (propertyCard.getCurrentRent() < 3) {
                 propertyCard.setCurrentRentLevel(3);
+                updated.add(propertyCard);
             }
         });
     }

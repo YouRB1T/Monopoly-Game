@@ -12,9 +12,4 @@ public class DtoChanceHandlerResponse implements IDtoCardHandlerResponse{
     private Player player;
     private GameSession gameSession;
     private ChanceCard chanceCard;
-
-    @Override
-    public GameSession getGameSession() {
-        return gameSession;
-    }
 }

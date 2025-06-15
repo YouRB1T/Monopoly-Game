@@ -1,4 +1,4 @@
-package com.monopoly.websocet.massage.lobby;
+package com.monopoly.websocet.massage.request.lobby;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

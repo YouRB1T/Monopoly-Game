@@ -1,17 +1,13 @@
 package com.monopoly.mapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.monopoly.domain.dto.request.DtoHandlerRequest;
 import com.monopoly.domain.dto.request.card.*;
-import com.monopoly.domain.dto.request.engine.DtoEndPlayerMoveRequest;
-import com.monopoly.domain.dto.request.engine.DtoStartPlayerMoveRequest;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.PropertyCard;
 import com.monopoly.domain.engine.card.special.PrisonCard;
 import com.monopoly.domain.engine.enums.HandleType;
-import com.monopoly.websocet.massage.session.GameHandlerMessage;
-import io.lettuce.core.dynamic.annotation.CommandNaming;
+import com.monopoly.websocet.massage.request.session.RequestGameHandlerMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +16,10 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class GameHandlerMessageMapper {
+public class RequestGameHandlerMessageMapper {
     private final GameSessionMapper gameSessionMapper;
 
-    public DtoHandlerRequest map(GameHandlerMessage message) {
+    public DtoHandlerRequest mapToRequest(RequestGameHandlerMessage message) {
         UUID sessionId = message.getSessionId();
         HandleType type = message.getHandleType();
         Map<String, Object> data = message.getEventData();

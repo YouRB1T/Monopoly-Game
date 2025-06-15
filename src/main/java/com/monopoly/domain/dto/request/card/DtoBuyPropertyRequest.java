@@ -11,12 +11,12 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class DtoBuyPropertyRequest implements IDtoCardHandlerRequest{
-    private GameSession gameSessionId;
+    private GameSession gameSession;
     private Player player;
     private PropertyCard card;
 
     @Override
     public GameSession getGameSession() {
-        return gameSessionId;
+        return gameSession;
     }
 }

@@ -1,4 +1,4 @@
-package com.monopoly.websocet.massage.lobby;
+package com.monopoly.websocet.massage.request.lobby;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -18,7 +18,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = ExcludeLobbyMessage.class, name = "EXCLUDE_LOBBY"),
         @JsonSubTypes.Type(value = StartGameMessage.class, name = "START_GAME")
 })
-public abstract class WebSocketMessageLobby extends WebSocketMessage {
+public abstract class ResponseWebSocketMessageLobby extends WebSocketMessage {
     private UUID lobbyId;
 }
 

@@ -1,14 +1,13 @@
-package com.monopoly.websocet.massage.session;
+package com.monopoly.websocet.massage.request.session;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Map;
-import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class EndGameMessage extends WebSocketMessageSession {
+public class RequestEndGameMessage extends RequestWebSocketMessageSession {
     private String reason;
     private Map<String, Object> gameResults;
 }

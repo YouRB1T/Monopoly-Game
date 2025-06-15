@@ -1,9 +1,8 @@
-package com.monopoly.websocet.massage.session;
+package com.monopoly.websocet.massage.request.session;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.monopoly.websocet.massage.WebSocketMessage;
-import com.monopoly.websocet.massage.lobby.StartGameMessage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,9 +12,9 @@ import java.util.UUID;
 @Data
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = EndGameMessage.class, name = "END_GAME"),
-        @JsonSubTypes.Type(value = GameHandlerMessage.class, name = "HANDLE_EVENT")
+        @JsonSubTypes.Type(value = RequestEndGameMessage.class, name = "END_GAME"),
+        @JsonSubTypes.Type(value = RequestGameHandlerMessage.class, name = "HANDLE_EVENT")
 })
-public abstract class WebSocketMessageSession extends WebSocketMessage {
+public abstract class RequestWebSocketMessageSession extends WebSocketMessage {
     private UUID sessionId;
 }
