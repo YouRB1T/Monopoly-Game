@@ -15,7 +15,8 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = CreateLobbyMessage.class, name = "CREATE_LOBBY"),
         @JsonSubTypes.Type(value = JoinLobbyMessage.class, name = "JOIN_LOBBY"),
         @JsonSubTypes.Type(value = CloseLobbyMessage.class, name = "CLOSE_LOBBY"),
-        @JsonSubTypes.Type(value = ExcludeLobbyMessage.class, name = "EXCLUDE_LOBBY")
+        @JsonSubTypes.Type(value = ExcludeLobbyMessage.class, name = "EXCLUDE_LOBBY"),
+        @JsonSubTypes.Type(value = StartGameMessage.class, name = "START_GAME")
 })
 public abstract class WebSocketMessageLobby extends WebSocketMessage {
     private UUID lobbyId;

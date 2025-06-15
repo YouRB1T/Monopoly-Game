@@ -10,12 +10,12 @@ import com.monopoly.service.PropertyCardService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import static java.rmi.server.LogStream.log;
 
+@Component
 @Slf4j
-@RequiredArgsConstructor
-@Setter
 public class UpgradePropertyHandler implements CardHandler<DtoUpgradePropertyResponse, DtoUpgradePropertyRequest> {
 
     @Override
@@ -32,6 +32,11 @@ public class UpgradePropertyHandler implements CardHandler<DtoUpgradePropertyRes
         log("Карта " + propertyCard.getTitle() + " была улучшена до уровня" + newLevel);
 
         return new DtoUpgradePropertyResponse(request.getGameSession(), propertyCard, newLevel);
+    }
+
+    @Override
+    public Class<? extends DtoUpgradePropertyRequest> getSupportedRequestType() {
+        return DtoUpgradePropertyRequest.class;
     }
 
     @Override

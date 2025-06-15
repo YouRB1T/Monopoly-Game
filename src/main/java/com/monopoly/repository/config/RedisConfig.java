@@ -20,7 +20,7 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(); // default localhost:6379
+        return new LettuceConnectionFactory(); //localhost:6379
     }
 
     @Bean
@@ -28,11 +28,9 @@ public class RedisConfig {
         RedisTemplate<UUID, GameSession> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
-        // Ключи — UUID, сериализуем как строки
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
 
-        // Создание кастомного ObjectMapper (если нужно включить типы)
         ObjectMapper objectMapper = JsonMapper.builder()
                 .activateDefaultTyping(
                         LaissezFaireSubTypeValidator.instance,
@@ -40,7 +38,6 @@ public class RedisConfig {
                         JsonTypeInfo.As.PROPERTY)
                 .build();
 
-        // Новый способ: передаём ObjectMapper через конструктор
         Jackson2JsonRedisSerializer<GameSession> valueSerializer =
                 new Jackson2JsonRedisSerializer<>(objectMapper, GameSession.class);
 

@@ -13,12 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import static java.rmi.server.LogStream.log;
 
+@Component
 @Slf4j
-@RequiredArgsConstructor
-@Setter
 public class PayRentHandler implements CardHandler<DtoPayRentResponse, DtoPayRentRequest> {
     @Autowired
     private GameSessionService gameSessionService;
@@ -40,6 +40,11 @@ public class PayRentHandler implements CardHandler<DtoPayRentResponse, DtoPayRen
         log("Игрок " + player.getName() + " заплатил аренду " + rent +
                 " игроку " + owner.getName() + " за карту " + propertyCard.getTitle());
         return new DtoPayRentResponse(gameSession, player, propertyCard, owner, rent);
+    }
+
+    @Override
+    public Class<? extends DtoPayRentRequest> getSupportedRequestType() {
+        return DtoPayRentRequest.class;
     }
 
     @Override

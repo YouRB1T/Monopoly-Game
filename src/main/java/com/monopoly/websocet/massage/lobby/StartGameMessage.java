@@ -1,14 +1,13 @@
-package com.monopoly.websocet.massage.session;
+package com.monopoly.websocet.massage.lobby;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Map;
-import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StartGameMessage extends WebSocketMessageSession {
+public class StartGameMessage extends WebSocketMessageLobby {
     private boolean isClassic;
     private Map<String, Object> initialGameState;
 }

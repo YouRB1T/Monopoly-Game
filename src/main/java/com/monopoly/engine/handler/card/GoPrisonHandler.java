@@ -12,13 +12,17 @@ import com.monopoly.service.PrisonService;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import static java.rmi.server.LogStream.log;
 
-@Getter
-@Setter
+@Component
 @Slf4j
 public class GoPrisonHandler implements CardHandler<DtoGoPrisonResponse, DtoGoPrisonRequest> {
+
+    @Autowired
+    private PrisonService prisonService;
 
     @Override
     public DtoGoPrisonResponse handle(DtoGoPrisonRequest request) {
@@ -26,9 +30,14 @@ public class GoPrisonHandler implements CardHandler<DtoGoPrisonResponse, DtoGoPr
         GameSession gameSession = request.getGameSession();
         PrisonCard prisonCard = (PrisonCard) request.getPrisonCard();
 
-        PrisonService.sandToPrison(player, gameSession);
+        prisonService.sandToPrison(player, gameSession);
         log("Игрок " + player.getName() + " отправлен в тюрьму картой " + prisonCard.getTitle());
         return new DtoGoPrisonResponse(gameSession, player, prisonCard);
+    }
+
+    @Override
+    public Class<? extends DtoGoPrisonRequest> getSupportedRequestType() {
+        return null;
     }
 
     @Override

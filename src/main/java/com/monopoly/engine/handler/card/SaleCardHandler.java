@@ -10,9 +10,12 @@ import com.monopoly.domain.engine.card.PropertyCard;
 import com.monopoly.service.GameSessionService;
 import com.monopoly.service.PropertyCardService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Setter
+@Component
+@Slf4j
 public class SaleCardHandler implements CardHandler<DtoSaleCardResponse, DtoSaleCardRequest>{
 
     @Autowired
@@ -42,6 +45,11 @@ public class SaleCardHandler implements CardHandler<DtoSaleCardResponse, DtoSale
                 " у игрока " + oldOwner.getName() + " за " + price);
 
         return new DtoSaleCardResponse(gameSession, oldOwner, newOwner, propertyCard, price);
+    }
+
+    @Override
+    public Class<? extends DtoSaleCardRequest> getSupportedRequestType() {
+        return DtoSaleCardRequest.class;
     }
 
     @Override

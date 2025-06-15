@@ -1,25 +1,30 @@
 package com.monopoly.engine.handler.engine;
 
+import com.monopoly.domain.dto.request.DtoHandlerRequest;
+import com.monopoly.domain.dto.request.engine.DtoEndPlayerMoveRequest;
+import com.monopoly.domain.dto.response.DtoHandlerResponse;
+import com.monopoly.domain.dto.response.engine.DtoEndPlayerMoveResponse;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.service.GameSessionService;
-import com.monopoly.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class EndPlayerMoveHandler implements EngineHandler {
+public class EndPlayerMoveHandler implements EngineHandler<DtoEndPlayerMoveResponse, DtoEndPlayerMoveRequest> {
     @Autowired
     private GameSessionService gameSessionService;
-    private Player currentPlayer;
-    private Player nextPlayer;
+
     @Override
-    public void handle(GameSession gameSession) {
-        currentPlayer = gameSession.getCurrentPlayer();
+    public DtoEndPlayerMoveResponse handle(DtoEndPlayerMoveRequest request) {
+        GameSession gameSession = request.getGameSession();
+
+        Player currentPlayer = gameSession.getCurrentPlayer();
         currentPlayer.setComboTimes(0);
-        nextPlayer = gameSessionService.setNextPlayer(gameSession);
+        Player nextPlayer = gameSessionService.setNextPlayer(gameSession);
+        return new DtoEndPlayerMoveResponse(gameSession, nextPlayer);
     }
 
     @Override
-    public boolean canHandle(GameSession gameSession) {
+    public boolean canHandle(DtoEndPlayerMoveRequest request) {
         return true;
     }
 }

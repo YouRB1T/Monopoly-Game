@@ -12,10 +12,12 @@ import com.monopoly.service.PrisonService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Random;
 
+@Component
 @Setter
 @RequiredArgsConstructor
 public class ChanceHandler implements CardHandler<DtoChanceHandlerResponse, DtoChanceHandlerRequest> {
@@ -47,6 +49,11 @@ public class ChanceHandler implements CardHandler<DtoChanceHandlerResponse, DtoC
         }
 
         return new DtoChanceHandlerResponse(player, gameSession, chanceCard);
+    }
+
+    @Override
+    public Class<? extends DtoChanceHandlerRequest> getSupportedRequestType() {
+        return DtoChanceHandlerRequest.class;
     }
 
     @Override

@@ -21,20 +21,22 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GameSessionEngineService implements GameSessionEngine {
 
-    private final Map<Class<? extends IDtoCardHandlerRequest>, CardHandler> handlerMap;
+    private final Map<Class<? extends DtoHandlerRequest>, CardHandler<?, ?>> handlerMap;
 
     @Override
     public DtoHandlerResponse handleGameEvent(DtoHandlerRequest request) {
-
-        CardHandler handler = handlerMap.get(request.getClass());
+        CardHandler<?, ?> handler = handlerMap.get(request.getClass());
 
         if (handler == null) {
             throw new IllegalArgumentException("No handler found for request type: " + request.getClass().getSimpleName());
         }
 
-        DtoHandlerResponse response = handler.handle(request);
+        @SuppressWarnings("unchecked")
+        CardHandler<DtoHandlerResponse, DtoHandlerRequest> typedHandler =
+                (CardHandler<DtoHandlerResponse, DtoHandlerRequest>) handler;
 
-        return response;
+        return typedHandler.handle(request);
     }
 }
+
 

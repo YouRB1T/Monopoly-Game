@@ -9,12 +9,15 @@ import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.TreasuryCard;
 import com.monopoly.service.PlayerService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Random;
 
-@Setter
+@Component
+@Slf4j
 public class TreasuryHandler implements CardHandler<DtoTreasuryHandlerResponse, DtoTreasuryHandlerRequest> {
     private Random random = new Random();
 
@@ -45,6 +48,11 @@ public class TreasuryHandler implements CardHandler<DtoTreasuryHandlerResponse, 
         }
 
         return new DtoTreasuryHandlerResponse(gameSession, player, treasuryCard);
+    }
+
+    @Override
+    public Class<? extends DtoTreasuryHandlerRequest> getSupportedRequestType() {
+        return DtoTreasuryHandlerRequest.class;
     }
 
     @Override

@@ -1,27 +1,37 @@
 package com.monopoly.engine.handler.engine;
 
+import com.monopoly.domain.dto.request.DtoHandlerRequest;
+import com.monopoly.domain.dto.request.engine.DtoStartGameRequest;
+import com.monopoly.domain.dto.response.DtoHandlerResponse;
+import com.monopoly.domain.dto.response.engine.DtoStartGameResponse;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.service.GameSessionService;
 import com.monopoly.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class StartGameHandler implements EngineHandler{
+import java.util.List;
+
+@Component
+public class StartGameHandler implements EngineHandler<DtoStartGameResponse, DtoStartGameRequest>{
     @Autowired
     private PlayerService playerService;
     @Autowired
     private GameSessionService gameSessionService;
-    private Integer START_MONEYS = 2000;
+
     @Override
-    public void handle(GameSession gameSession) {
-        gameSession.getPlayers().stream()
+    public DtoStartGameResponse handle(DtoStartGameRequest request) {
+        request.getGameSession().getPlayers().stream()
                 .forEach(player -> {
-                    playerService.addMoneys(player, START_MONEYS);
-                    gameSessionService.movePlayerToPosition(gameSession, player, 0);
+                    playerService.addMoneys(player,
+                            (Integer) request.getGameSession().getGameRules().get("START_MONEYS"));
+                    gameSessionService.movePlayerToPosition(request.getGameSession(), player, 0);
                 });
+        return new DtoStartGameResponse(request.getGameSession(), List.of("START_GAME"));
     }
 
     @Override
-    public boolean canHandle(GameSession gameSession) {
+    public boolean canHandle(DtoStartGameRequest request) {
         return true;
     }
 }

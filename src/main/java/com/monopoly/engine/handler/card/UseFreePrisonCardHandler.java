@@ -8,9 +8,12 @@ import com.monopoly.domain.engine.card.Card;
 import com.monopoly.domain.engine.card.special.PrisonCard;
 import com.monopoly.service.PrisonService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Setter
+@Component
+@Slf4j
 public class UseFreePrisonCardHandler implements CardHandler<DtoUseFreePrisonCardResponse, DtoUseFreePrisonCardRequest>{
 
     @Autowired
@@ -35,6 +38,11 @@ public class UseFreePrisonCardHandler implements CardHandler<DtoUseFreePrisonCar
 
         return new DtoUseFreePrisonCardResponse(gameSession, player, card);
 
+    }
+
+    @Override
+    public Class<? extends DtoUseFreePrisonCardRequest> getSupportedRequestType() {
+        return DtoUseFreePrisonCardRequest.class;
     }
 
     @Override

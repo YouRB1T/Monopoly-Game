@@ -6,11 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class GameSessionService {
     @Autowired
     private PlayerService playerService;
+
+    public Integer[] rollDice() {
+        Random random = new Random();
+        int die1 = random.nextInt(6) + 1;
+        int die2 = random.nextInt(6) + 1;
+        return new Integer[]{die1, die2};
+    }
 
     public void transferMoney(Player from, Player to, Integer amount) {
         if (from.getMoneys() < amount) {

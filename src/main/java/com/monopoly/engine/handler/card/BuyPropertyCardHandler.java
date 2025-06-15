@@ -9,9 +9,11 @@ import com.monopoly.service.PropertyCardService;
 import com.monopoly.service.PlayerService;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 @Setter
 public class BuyPropertyCardHandler implements CardHandler<DtoBayPropertyResponse, DtoBuyPropertyRequest>{
     @Autowired
@@ -40,6 +42,11 @@ public class BuyPropertyCardHandler implements CardHandler<DtoBayPropertyRespons
         }
 
         return new DtoBayPropertyResponse(gameSession, player);
+    }
+
+    @Override
+    public Class<? extends DtoBuyPropertyRequest> getSupportedRequestType() {
+        return DtoBuyPropertyRequest.class;
     }
 
     private boolean hasPropertyGroup(Player player, PropertyGroup group) {

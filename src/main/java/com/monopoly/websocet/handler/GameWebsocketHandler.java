@@ -1,4 +1,4 @@
-package com.monopoly.websocet;
+package com.monopoly.websocet.handler;
 
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketHandler;

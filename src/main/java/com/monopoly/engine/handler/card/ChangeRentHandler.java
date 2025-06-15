@@ -8,7 +8,9 @@ import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.card.PropertyCard;
 import com.monopoly.service.PropertyCardService;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
+@Component
 @Setter
 public class ChangeRentHandler implements CardHandler<DtoChangeRentResponse, DtoChangeRentRequest>{
 
@@ -30,6 +32,11 @@ public class ChangeRentHandler implements CardHandler<DtoChangeRentResponse, Dto
                 " изменен на " + newRentLevel);
 
         return new DtoChangeRentResponse(gameSession, propertyCard, newRentLevel);
+    }
+
+    @Override
+    public Class<? extends DtoChangeRentRequest> getSupportedRequestType() {
+        return DtoChangeRentRequest.class;
     }
 
     @Override
