@@ -22,6 +22,7 @@ public class GameSession implements Serializable {
     private Map<Player, Integer> playerPosition;
     private Map<PropertyCard, Player> propertyCardOwners;
     private final Map<String, PropertyGroup> propertyGroups;
+    private final Map<String, Object> gameRules;
     private Player currentPlayer;
     private GameStatus status;
 }

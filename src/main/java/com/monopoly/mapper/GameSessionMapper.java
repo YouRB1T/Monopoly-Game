@@ -6,16 +6,16 @@ import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.Card;
 import com.monopoly.repository.GameSessionRedisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Component
 public class GameSessionMapper {
-    private final GameSession gameSession;
-
-    public GameSessionMapper(GameSession gameSession) {
-        this.gameSession = gameSession;
-    }
+    private GameSession gameSession;
+    @Autowired
+    private GameSessionRedisRepository repository;
 
     public Player getPLayerById(UUID playerId) {
         return gameSession.getPlayers().stream()
@@ -41,6 +41,12 @@ public class GameSessionMapper {
                 .orElseThrow(
                         () -> new IllegalArgumentException("ERROR: Board not find " + boardId)
                 );
+    }
+
+    public GameSession getGameSessionById(UUID gameSessionId) {
+        Optional<GameSession> gameSession = repository.findById(gameSessionId);
+        gameSession.ifPresent(session -> this.gameSession = session);
+        return this.gameSession;
     }
 
 }

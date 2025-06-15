@@ -20,11 +20,8 @@ public class CardHandlerConfig {
             List<CardHandler> handlers
     ) {
         Map<Class<? extends IDtoCardHandlerRequest>, CardHandler> map = new HashMap<>();
-
-        // Добавляй вручную или через Handler.getSupportedDtoClass()
         map.put(DtoBuyPropertyRequest.class, getHandler(handlers, BuyPropertyCardHandler.class));
         map.put(DtoChanceHandlerRequest.class, getHandler(handlers, ChanceHandler.class));
-        // И так далее...
 
         return map;
     }

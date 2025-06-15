@@ -22,45 +22,19 @@ import java.util.UUID;
 public class GameSessionEngineService implements GameSessionEngine {
 
     private final Map<Class<? extends IDtoCardHandlerRequest>, CardHandler> handlerMap;
-    private final GameSessionRedisRepository gameSessionRepository;
 
     @Override
     public DtoHandlerResponse handleGameEvent(DtoHandlerRequest request) {
 
         CardHandler handler = handlerMap.get(request.getClass());
+
         if (handler == null) {
             throw new IllegalArgumentException("No handler found for request type: " + request.getClass().getSimpleName());
         }
 
-        // Загружаем сессию
-        UUID sessionId = dtoRequest.getGameSessionId();
-        GameSession gameSession = gameSessionRepository.findById(sessionId)
-                .orElseThrow(() -> new IllegalArgumentException("GameSession not found: " + sessionId));
+        DtoHandlerResponse response = handler.handle(request);
 
-        // Устанавливаем нужные поля в handler
-        injectFields(handler, request, gameSession);
-
-        // Вызываем обработку
-        handler.handle();
-
-        // Возвращаем результат
-        return new DtoHandlerResponse(/* можешь добавить статус или response-объект */);
-    }
-
-    private IDtoCardHandlerResponse injectFields(CardHandler handler, IDtoCardHandlerRequest request, GameSession gameSession) {
-        if (handler instanceof BuyPropertyCardHandler && request instanceof DtoBuyPropertyRequest dto) {
-            BuyPropertyCardHandler h = (BuyPropertyCardHandler) handler;
-            h.setPlayer(gameSession.getCurrentPlayer());
-            h.setCard(gameSession.getBoard().getPropertyById(dto.getPropertyId()));
-        }
-
-        if (handler instanceof ChanceHandler && request instanceof DtoChanceHandlerRequest) {
-            ChanceHandler h = (ChanceHandler) handler;
-            h.setPlayer(gameSession.getCurrentPlayer());
-            h.setPrisonCard(gameSession.getCardDeck().getRandomPrisonCard());
-        }
-
-        // Добавь остальные if-ветки для других Handler'ов (PayRentHandler, GoToPrisonHandler и т.д.)
+        return response;
     }
 }
 
