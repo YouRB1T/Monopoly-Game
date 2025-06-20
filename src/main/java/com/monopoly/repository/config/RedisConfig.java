@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.monopoly.domain.engine.GameSession;
+import com.monopoly.domain.engine.Lobby;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -24,8 +25,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<UUID, GameSession> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<UUID, GameSession> template = new RedisTemplate<>();
+    public RedisTemplate<String, GameSession> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, GameSession> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
         template.setKeySerializer(new StringRedisSerializer());
@@ -45,6 +46,30 @@ public class RedisConfig {
         template.setHashValueSerializer(valueSerializer);
 
         template.afterPropertiesSet();
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, Lobby> lobbyRedisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, Lobby> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+        
+        ObjectMapper objectMapper = JsonMapper.builder()
+                .activateDefaultTyping(
+                        LaissezFaireSubTypeValidator.instance,
+                        ObjectMapper.DefaultTyping.NON_FINAL,
+                        JsonTypeInfo.As.PROPERTY)
+                .build();
+        
+        Jackson2JsonRedisSerializer<Lobby> valueSerializer =
+                new Jackson2JsonRedisSerializer<>(objectMapper, Lobby.class);
+        
+        template.setValueSerializer(valueSerializer);
+        template.setHashValueSerializer(valueSerializer);
+        
         return template;
     }
 

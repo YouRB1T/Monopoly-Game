@@ -1,10 +1,13 @@
 package com.monopoly.repository.converter;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.monopoly.domain.engine.GameSession;
+import com.monopoly.exception.GameSessionSerializationException;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Convert;
 
@@ -17,6 +20,12 @@ public class GameSessionTypeConverter implements AttributeConverter<GameSession,
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new JavaTimeModule());
         this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // Добавляем обработку циклических ссылок
+        this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        // Настройка для обработки циклических ссылок
+        this.objectMapper.configure(SerializationFeature.WRITE_SELF_REFERENCES_AS_NULL, true);
     }
 
     @Override
@@ -27,7 +36,7 @@ public class GameSessionTypeConverter implements AttributeConverter<GameSession,
         try {
             return objectMapper.writeValueAsString(gameSession);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Ошибка сериализации GameSession: " + e.getMessage(), e);
+            throw new GameSessionSerializationException("Ошибка сериализации GameSession: " + e.getMessage(), e);
         }
     }
 
@@ -40,7 +49,7 @@ public class GameSessionTypeConverter implements AttributeConverter<GameSession,
         try {
             return objectMapper.readValue(string, GameSession.class);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Ошибка десериализации GameSession: " + e.getMessage(), e);
+            throw new GameSessionSerializationException("Ошибка десериализации GameSession: " + e.getMessage(), e);
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.monopoly.mapper;
 
-import com.monopoly.domain.dto.response.DtoHandlerResponse;
+import com.monopoly.domain.engine.dto.response.DtoHandlerResponse;
 import com.monopoly.websocet.massage.request.session.RequestGameHandlerMessage;
-import com.monopoly.websocet.massage.response.ResponseGameHandlerMessage;
+import com.monopoly.websocet.massage.response.sessoin.ResponseGameHandlerMessage;
 
 import java.util.HashMap;
 import java.util.Map;

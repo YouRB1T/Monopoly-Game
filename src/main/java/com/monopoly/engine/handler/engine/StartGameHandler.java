@@ -1,10 +1,7 @@
 package com.monopoly.engine.handler.engine;
 
-import com.monopoly.domain.dto.request.DtoHandlerRequest;
-import com.monopoly.domain.dto.request.engine.DtoStartGameRequest;
-import com.monopoly.domain.dto.response.DtoHandlerResponse;
-import com.monopoly.domain.dto.response.engine.DtoStartGameResponse;
-import com.monopoly.domain.engine.GameSession;
+import com.monopoly.domain.engine.dto.request.engine.DtoStartGameRequest;
+import com.monopoly.domain.engine.dto.response.engine.DtoStartGameResponse;
 import com.monopoly.service.GameSessionService;
 import com.monopoly.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,7 @@
 package com.monopoly.engine.handler.card;
 
-import com.monopoly.domain.dto.request.DtoHandlerRequest;
-import com.monopoly.domain.dto.request.card.DtoStartCardMoveRequest;
-import com.monopoly.domain.dto.response.DtoHandlerResponse;
-import com.monopoly.domain.dto.response.card.DtoStartCardMoveResponse;
-import com.monopoly.domain.engine.GameSession;
-import com.monopoly.domain.engine.Player;
+import com.monopoly.domain.engine.dto.request.card.DtoStartCardMoveRequest;
+import com.monopoly.domain.engine.dto.response.card.DtoStartCardMoveResponse;
 import com.monopoly.service.PlayerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

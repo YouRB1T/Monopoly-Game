@@ -1,16 +1,12 @@
 package com.monopoly.engine.handler.card;
 
-import com.monopoly.domain.dto.request.DtoHandlerRequest;
-import com.monopoly.domain.dto.request.card.DtoPayRentRequest;
-import com.monopoly.domain.dto.response.DtoHandlerResponse;
-import com.monopoly.domain.dto.response.card.DtoPayRentResponse;
+import com.monopoly.domain.engine.dto.request.card.DtoPayRentRequest;
+import com.monopoly.domain.engine.dto.response.card.DtoPayRentResponse;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.PropertyCard;
 import com.monopoly.service.GameSessionService;
 import com.monopoly.service.PropertyCardService;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +18,8 @@ import static java.rmi.server.LogStream.log;
 public class PayRentHandler implements CardHandler<DtoPayRentResponse, DtoPayRentRequest> {
     @Autowired
     private GameSessionService gameSessionService;
+    @Autowired
+    private PropertyCardService propertyCardService;
 
     @Override
     public DtoPayRentResponse handle(DtoPayRentRequest request) {
@@ -29,12 +27,12 @@ public class PayRentHandler implements CardHandler<DtoPayRentResponse, DtoPayRen
         GameSession gameSession = request.getGameSession();
         PropertyCard propertyCard = request.getPropertyCard();
 
-        Player owner = PropertyCardService.getPropertyOwner(gameSession, propertyCard);
+        Player owner = propertyCardService.getPropertyOwner(gameSession, propertyCard);
         if (owner == null || owner.equals(player)) {
             return new DtoPayRentResponse(gameSession, player, propertyCard, owner, 0);
         }
 
-        Integer rent = PropertyCardService.calculateRent(propertyCard);
+        Integer rent = propertyCardService.calculateRent(propertyCard);
         gameSessionService.transferMoney(player, owner, rent);
 
         log("Игрок " + player.getName() + " заплатил аренду " + rent +
@@ -49,7 +47,7 @@ public class PayRentHandler implements CardHandler<DtoPayRentResponse, DtoPayRen
 
     @Override
     public boolean canHandle(DtoPayRentRequest request) {
-        Player owner = PropertyCardService.getPropertyOwner(request.getGameSession(), request.getPropertyCard());
+        Player owner = propertyCardService.getPropertyOwner(request.getGameSession(), request.getPropertyCard());
         return owner != null || !owner.equals(request.getPlayer());
     }
 }

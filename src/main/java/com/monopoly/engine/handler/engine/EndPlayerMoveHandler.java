@@ -1,9 +1,7 @@
 package com.monopoly.engine.handler.engine;
 
-import com.monopoly.domain.dto.request.DtoHandlerRequest;
-import com.monopoly.domain.dto.request.engine.DtoEndPlayerMoveRequest;
-import com.monopoly.domain.dto.response.DtoHandlerResponse;
-import com.monopoly.domain.dto.response.engine.DtoEndPlayerMoveResponse;
+import com.monopoly.domain.engine.dto.request.engine.DtoEndPlayerMoveRequest;
+import com.monopoly.domain.engine.dto.response.engine.DtoEndPlayerMoveResponse;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.service.GameSessionService;

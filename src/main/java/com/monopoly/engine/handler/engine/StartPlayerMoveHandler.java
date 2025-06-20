@@ -1,14 +1,10 @@
 package com.monopoly.engine.handler.engine;
 
-import com.monopoly.domain.dto.request.DtoHandlerRequest;
-import com.monopoly.domain.dto.request.engine.DtoStartPlayerMoveRequest;
-import com.monopoly.domain.dto.response.DtoHandlerResponse;
-import com.monopoly.domain.dto.response.engine.DtoStartPlayerMoveResponse;
+import com.monopoly.domain.engine.dto.request.engine.DtoStartPlayerMoveRequest;
+import com.monopoly.domain.engine.dto.response.engine.DtoStartPlayerMoveResponse;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.service.GameSessionService;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

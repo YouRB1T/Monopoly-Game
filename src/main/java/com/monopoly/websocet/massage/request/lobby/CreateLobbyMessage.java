@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CreateLobbyMessage extends WebSocketMessageLobby {
+public class CreateLobbyMessage extends ResponseWebSocketMessageLobby {
     private String lobbyName;
     private Integer maxPlayers;
     private String password;

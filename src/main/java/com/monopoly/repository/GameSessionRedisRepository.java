@@ -12,41 +12,43 @@ import java.util.UUID;
 @Repository
 public class GameSessionRedisRepository implements ActiveGameSessionRepository{
 
-    private final RedisTemplate<UUID, GameSession> redisTemplate;
-    private final ValueOperations<UUID, GameSession> ops;
+    private final RedisTemplate<String, GameSession> redisTemplate;
     private static final String KEY_PREFIX = "GameSession:";
 
-    public GameSessionRedisRepository(RedisTemplate<UUID, GameSession> redisTemplate) {
+    public GameSessionRedisRepository(RedisTemplate<String, GameSession> redisTemplate) {
         this.redisTemplate = redisTemplate;
-        ops = redisTemplate.opsForValue();
     }
 
-    private UUID buildKey(UUID id) {
-        return UUID.fromString(KEY_PREFIX + id);
+    private String buildKey(UUID id) {
+        return KEY_PREFIX + id.toString();
     }
 
     @Override
     public GameSession create(GameSession gameSession) {
-        ops.set(buildKey(gameSession.getId()), gameSession);
+        String key = buildKey(gameSession.getId());
+        redisTemplate.opsForValue().set(key, gameSession);
         return gameSession;
     }
 
     @Override
     public Optional<GameSession> findById(UUID id) {
-        return Optional.ofNullable(ops.get(buildKey(id)));
+        String key = buildKey(id);
+        return Optional.ofNullable(redisTemplate.opsForValue().get(key));
     }
 
     @Override
     public GameSession deleteById(UUID id) {
-        GameSession gameSession = ops.get(buildKey(id));
-        redisTemplate.delete(buildKey(id));
+        String key = buildKey(id);
+        GameSession gameSession = redisTemplate.opsForValue().get(key);
+        redisTemplate.delete(key);
         return gameSession;
     }
 
     @Override
     public boolean existsByID(UUID id) {
+        String key = buildKey(id);
         return Boolean.TRUE.equals(
-                redisTemplate.hasKey(buildKey(id))
+                redisTemplate.hasKey(key)
         );
     }
 }

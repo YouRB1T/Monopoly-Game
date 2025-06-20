@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class JoinLobbyMessage extends WebSocketMessageLobby {
+public class JoinLobbyMessage extends ResponseWebSocketMessageLobby {
     private UUID lobbyId;
     private String playerName;
     private String password;

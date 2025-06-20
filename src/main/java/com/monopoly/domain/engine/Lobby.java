@@ -1,0 +1,36 @@
+package com.monopoly.domain.engine;
+
+import com.monopoly.domain.engine.enums.LobbyStatus;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+@Data
+@EqualsAndHashCode
+public class Lobby implements Serializable {
+    private final UUID id;
+    private String name;
+    private Player creator;
+    private List<Player> players;
+    private Map<String, Object> gameRules;
+    private Integer maxPlayers;
+    private String password;
+    private LobbyStatus status;
+
+    public Lobby(UUID id, String name, Player creator, Map<String, Object> gameRules, Integer maxPlayers, String password) {
+        this.id = id;
+        this.name = name;
+        this.creator = creator;
+        this.players = new ArrayList<>();
+        this.players.add(creator); // Добавляем создателя в список игроков
+        this.gameRules = gameRules;
+        this.maxPlayers = maxPlayers;
+        this.password = password;
+        this.status = LobbyStatus.WAITING;
+    }
+}

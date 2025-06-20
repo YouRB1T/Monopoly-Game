@@ -7,30 +7,30 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PropertyCardService {
-    public static void transferProperty(GameSession session, PropertyCard card, Player from, Player to) {
+    public void transferProperty(GameSession session, PropertyCard card, Player from, Player to) {
         if (from != null) {
             session.getPropertyCardOwners().remove(card);
         }
         session.getPropertyCardOwners().put(card, to);
     }
 
-    public static boolean isPropertyOwned(GameSession session, PropertyCard card) {
+    public boolean isPropertyOwned(GameSession session, PropertyCard card) {
         return session.getPropertyCardOwners().containsKey(card);
     }
 
-    public static Player getPropertyOwner(GameSession session, PropertyCard card) {
+    public Player getPropertyOwner(GameSession session, PropertyCard card) {
         return session.getPropertyCardOwners().get(card);
     }
 
-    public static Integer calculateRent(PropertyCard card) {
+    public Integer calculateRent(PropertyCard card) {
         return card.getRentOfCard().getCurrentRent();
     }
 
-    public static boolean canUpgradeProperty(PropertyCard card, Integer upgradeLevel) {
+    public boolean canUpgradeProperty(PropertyCard card, Integer upgradeLevel) {
         return card.getRentOfCard().getRentLevels().get(upgradeLevel) != null;
     }
 
-    public static void upgradeProperty(PropertyCard card, Integer upgradeLevel) {
+    public  void upgradeProperty(PropertyCard card, Integer upgradeLevel) {
         if (canUpgradeProperty(card, upgradeLevel)) {
             card.setCurrentRentLevel(upgradeLevel);
         }

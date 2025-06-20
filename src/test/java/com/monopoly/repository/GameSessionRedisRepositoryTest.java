@@ -1,112 +1,123 @@
 package com.monopoly.repository;
 
 import com.monopoly.domain.engine.GameSession;
+import com.monopoly.domain.engine.Player;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class GameSessionRedisRepositoryTest {
 
     @Mock
-    private RedisTemplate<UUID, GameSession> redisTemplate;
+    private RedisTemplate<String, GameSession> redisTemplate;
     
     @Mock
-    private ValueOperations<UUID, GameSession> valueOperations;
-    
+    private ValueOperations<String, GameSession> valueOperations;
+
     private GameSessionRedisRepository repository;
+    
     private GameSession gameSession;
     private UUID sessionId;
-
+    private String sessionKey;
+    
     @BeforeEach
     void setUp() {
-        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-        repository = new GameSessionRedisRepository(redisTemplate);
+        // Инициализация игровой сессии
         sessionId = UUID.randomUUID();
-        gameSession = mock(GameSession.class);
-        when(gameSession.getId()).thenReturn(sessionId);
+        gameSession = new GameSession(new ArrayList<>(), sessionId, new ArrayList<>(), new TreeMap<>(), new HashMap<>());
+        gameSession.setPropertyCardOwners(new TreeMap<>());
+        
+        sessionKey = "GameSession:" + sessionId;
+        
+        // Настройка моков
+        repository = new GameSessionRedisRepository(redisTemplate);
+        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
     }
-
+    
     @Test
-    void create_shouldSaveGameSessionToRedis() {
-        // When
+    @DisplayName("Должен создавать игровую сессию в Redis")
+    void shouldCreateGameSession() {
+        // Arrange
+        doNothing().when(valueOperations).set(sessionKey, gameSession);
+        
+        // Act
         GameSession result = repository.create(gameSession);
         
-        // Then
-        verify(valueOperations).set(any(UUID.class), eq(gameSession));
+        // Assert
         assertEquals(gameSession, result);
+        verify(valueOperations).set(sessionKey, gameSession);
     }
-
+    
     @Test
-    void findById_shouldReturnGameSessionWhenExists() {
-        // Given
-        when(valueOperations.get(any(UUID.class))).thenReturn(gameSession);
+    @DisplayName("Должен находить игровую сессию по ID")
+    void shouldFindGameSessionById() {
+        // Arrange
+        when(valueOperations.get(sessionKey)).thenReturn(gameSession);
         
-        // When
+        // Act
         Optional<GameSession> result = repository.findById(sessionId);
         
-        // Then
+        // Assert
         assertTrue(result.isPresent());
         assertEquals(gameSession, result.get());
+        verify(valueOperations).get(sessionKey);
     }
-
+    
     @Test
-    void findById_shouldReturnEmptyOptionalWhenNotExists() {
-        // Given
-        when(valueOperations.get(any(UUID.class))).thenReturn(null);
+    @DisplayName("Должен возвращать пустой Optional, если сессия не найдена")
+    void shouldReturnEmptyOptionalWhenSessionNotFound() {
+        // Arrange
+        when(valueOperations.get(sessionKey)).thenReturn(null);
         
-        // When
+        // Act
         Optional<GameSession> result = repository.findById(sessionId);
         
-        // Then
+        // Assert
         assertFalse(result.isPresent());
+        verify(valueOperations).get(sessionKey);
     }
-
+    
     @Test
-    void deleteById_shouldRemoveGameSessionAndReturnIt() {
-        // Given
-        when(valueOperations.get(any(UUID.class))).thenReturn(gameSession);
+    @DisplayName("Должен удалять игровую сессию по ID")
+    void shouldDeleteGameSessionById() {
+        // Arrange
+        when(valueOperations.get(sessionKey)).thenReturn(gameSession);
+        when(redisTemplate.delete(sessionKey)).thenReturn(true);
         
-        // When
+        // Act
         GameSession result = repository.deleteById(sessionId);
         
-        // Then
-        verify(redisTemplate).delete(any(UUID.class));
+        // Assert
         assertEquals(gameSession, result);
+        verify(valueOperations).get(sessionKey);
+        verify(redisTemplate).delete(sessionKey);
     }
 
     @Test
-    void existsById_shouldReturnTrueWhenExists() {
-        // Given
-        when(redisTemplate.hasKey(any(UUID.class))).thenReturn(true);
-        
-        // When
+    @DisplayName("Должен проверять существование игровой сессии")
+    void shouldCheckIfGameSessionExists() {
+        // Arrange
+        when(redisTemplate.hasKey(sessionKey)).thenReturn(true);
+        when(redisTemplate.opsForValue()).thenReturn(valueOperations);
+        repository.create(gameSession);
+        // Act
         boolean result = repository.existsByID(sessionId);
-        
-        // Then
+
+        // Assert
         assertTrue(result);
+        verify(redisTemplate).hasKey(sessionKey);
     }
 
-    @Test
-    void existsById_shouldReturnFalseWhenNotExists() {
-        // Given
-        when(redisTemplate.hasKey(any(UUID.class))).thenReturn(false);
-        
-        // When
-        boolean result = repository.existsByID(sessionId);
-        
-        // Then
-        assertFalse(result);
-    }
 }

@@ -23,10 +23,10 @@ public class Player implements Id, Prisoned {
     private Integer prisonTurns;
     private Integer freePrisonCards;
 
-    public Player(String name, UUID id, Integer moneys, Set<Card> playerCards) {
-        this.name = name;
+    public Player(UUID id, Integer moneys, Set<Card> playerCards) {
         this.id = id;
         this.moneys = moneys;
+        this.totalMoneys = moneys;
         this.playerCards = playerCards;
     }
 

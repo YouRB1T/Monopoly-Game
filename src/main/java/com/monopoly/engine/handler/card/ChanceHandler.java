@@ -1,13 +1,10 @@
 package com.monopoly.engine.handler.card;
 
-import com.monopoly.domain.dto.request.DtoHandlerRequest;
-import com.monopoly.domain.dto.request.card.DtoChanceHandlerRequest;
-import com.monopoly.domain.dto.response.DtoHandlerResponse;
-import com.monopoly.domain.dto.response.card.DtoChanceHandlerResponse;
+import com.monopoly.domain.engine.dto.request.card.DtoChanceHandlerRequest;
+import com.monopoly.domain.engine.dto.response.card.DtoChanceHandlerResponse;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.ChanceCard;
-import com.monopoly.domain.engine.card.special.PrisonCard;
 import com.monopoly.service.PrisonService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

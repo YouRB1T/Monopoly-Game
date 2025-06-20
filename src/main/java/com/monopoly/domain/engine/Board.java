@@ -8,7 +8,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 public class Board implements Id {
@@ -17,6 +16,15 @@ public class Board implements Id {
     private final List<TreasuryCard> treasuryCards;
     private final int size;
     private final List<BoardCard> cardsOnBoard;
+
+    public Board(UUID id, List<ChanceCard> chanceCards, List<TreasuryCard> treasuryCards,
+                 int size, List<BoardCard> cardsOnBoard) {
+        this.id = id;
+        this.chanceCards = chanceCards;
+        this.treasuryCards = treasuryCards;
+        this.size = size;
+        this.cardsOnBoard = cardsOnBoard;
+    }
 
     @Override
     public UUID getId() {

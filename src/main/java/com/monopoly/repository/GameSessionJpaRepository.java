@@ -26,7 +26,7 @@ public interface GameSessionJpaRepository extends JpaRepository<GameSessionEntit
     @Query(value = "SELECT * FROM game_session_archive WHERE jsonb_array_length(session_data->'players') = :playerCount", nativeQuery = true)
     List<GameSessionEntity> findByPlayerCount(@Param("playerCount") int playerCount);
 
-    // Статистика по играм за период
+
     @Query(value = """
         SELECT COUNT(*) FROM game_session_archive 
         WHERE archived_at BETWEEN :startDate AND :endDate

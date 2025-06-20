@@ -7,6 +7,6 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ExcludeLobbyMessage extends WebSocketMessageLobby{
+public class ExcludeLobbyMessage extends ResponseWebSocketMessageLobby{
     private UUID playerID;
 }

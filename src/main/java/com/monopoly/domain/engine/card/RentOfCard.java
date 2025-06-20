@@ -18,4 +18,10 @@ public class RentOfCard {
         currentRentLevel++;
         currentRent = rentLevels.get(currentRentLevel);
     }
+
+    public Integer getCurrentRent() {
+        if (currentRentLevel == null) return 0;
+        return rentLevels.getOrDefault(currentRentLevel, 0);
+    }
+
 }

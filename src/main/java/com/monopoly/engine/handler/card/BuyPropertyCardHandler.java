@@ -1,7 +1,7 @@
 package com.monopoly.engine.handler.card;
 
-import com.monopoly.domain.dto.request.card.DtoBuyPropertyRequest;
-import com.monopoly.domain.dto.response.card.DtoBayPropertyResponse;
+import com.monopoly.domain.engine.dto.request.card.DtoBuyPropertyRequest;
+import com.monopoly.domain.engine.dto.response.card.DtoBuyPropertyResponse;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.*;
@@ -16,19 +16,21 @@ import java.util.List;
 
 @Component
 @Setter
-public class BuyPropertyCardHandler implements CardHandler<DtoBayPropertyResponse, DtoBuyPropertyRequest>{
+public class BuyPropertyCardHandler implements CardHandler<DtoBuyPropertyResponse, DtoBuyPropertyRequest>{
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private PropertyCardService propertyCardService;
 
 
     @Override
-    public DtoBayPropertyResponse handle(DtoBuyPropertyRequest request) {
+    public DtoBuyPropertyResponse handle(DtoBuyPropertyRequest request) {
         List<Card> updated = new ArrayList<>();
         Player player = request.getPlayer();
         PropertyCard card = request.getCard();
         GameSession gameSession = request.getGameSession();
 
-        if (PropertyCardService.isPropertyOwned(gameSession, card)) {
+        if (propertyCardService.isPropertyOwned(gameSession, card)) {
             throw new IllegalStateException("Карта уже принадлежит другому игроку");
         }
 
@@ -44,7 +46,7 @@ public class BuyPropertyCardHandler implements CardHandler<DtoBayPropertyRespons
             appLevelForGroup(gameSession, card.getGroup(), updated);
         }
 
-        return new DtoBayPropertyResponse(gameSession, player, updated);
+        return new DtoBuyPropertyResponse(gameSession, player, updated);
     }
 
     @Override
@@ -53,10 +55,10 @@ public class BuyPropertyCardHandler implements CardHandler<DtoBayPropertyRespons
     }
 
     private boolean hasPropertyGroup(Player player, PropertyGroup group) {
-        List<Card> cards = player.getPlayerCards().stream()
+        List<Card> cards = new ArrayList<>(player.getPlayerCards().stream()
                 .filter(card -> card instanceof IPropertyGroup)
                 .filter(card -> ((IPropertyGroup) card).getGroup().equals(group.getName()))
-                .toList();
+                .toList());
 
         for (Card card : group.getPropertyCards()) {
             if (cards.contains(card)) {
@@ -80,7 +82,7 @@ public class BuyPropertyCardHandler implements CardHandler<DtoBayPropertyRespons
 
     @Override
     public boolean canHandle(DtoBuyPropertyRequest request) {
-        return !PropertyCardService.isPropertyOwned(request.getGameSession(), request.getCard())
+        return !propertyCardService.isPropertyOwned(request.getGameSession(), request.getCard())
                 && request.getPlayer().getMoneys() > request.getCard().getPrice();
     }
 }

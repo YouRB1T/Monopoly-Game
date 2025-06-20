@@ -2,17 +2,17 @@ package com.monopoly.websocet.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.monopoly.domain.dto.request.DtoHandlerRequest;
-import com.monopoly.domain.dto.response.DtoHandlerResponse;
+import com.monopoly.domain.engine.dto.request.DtoHandlerRequest;
+import com.monopoly.domain.engine.dto.response.DtoHandlerResponse;
 import com.monopoly.engine.GameSessionEngineService;
 import com.monopoly.mapper.RequestGameHandlerMessageMapper;
 import com.monopoly.mapper.ResponseGameHandlerMessageMapper;
 import com.monopoly.websocet.massage.request.session.RequestGameHandlerMessage;
-import com.monopoly.websocet.massage.response.ResponseGameHandlerMessage;
-import com.monopoly.websocet.massage.response.ResponseWebSocketMessageSession;
+import com.monopoly.websocet.massage.response.sessoin.ResponseGameHandlerMessage;
+import com.monopoly.websocet.massage.response.sessoin.ResponseWebSocketMessageSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.socket.*;
 
 import java.io.IOException;
@@ -22,10 +22,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @RequiredArgsConstructor
 public class GameWebsocketHandler implements WebSocketHandler {
-    private final ObjectMapper objectMapper;
-    private final RequestGameHandlerMessageMapper messageMapper;
-    private final ResponseGameHandlerMessageMapper dtoMapper;
-    private final GameSessionEngineService gameSessionEngineService;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
+    private RequestGameHandlerMessageMapper messageMapper;
+    @Autowired
+    private ResponseGameHandlerMessageMapper dtoMapper;
+    @Autowired
+    private GameSessionEngineService gameSessionEngineService;
+
     private final Set<WebSocketSession> sessions = ConcurrentHashMap.newKeySet();
 
     @Override
@@ -49,7 +54,7 @@ public class GameWebsocketHandler implements WebSocketHandler {
         broadcastToAll(response);
     }
 
-    private void broadcastToAll(ResponseWebSocketMessageSession response) throws JsonProcessingException {
+    protected void broadcastToAll(ResponseWebSocketMessageSession response) throws JsonProcessingException {
         String jsonResponse = objectMapper.writeValueAsString(response);
         for (WebSocketSession session : sessions) {
             if (session.isOpen()) {

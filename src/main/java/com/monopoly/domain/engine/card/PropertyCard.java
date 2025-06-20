@@ -12,14 +12,14 @@ import java.util.UUID;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class PropertyCard extends BoardCard implements IPrice, IRent, IPropertyGroup {
+public class PropertyCard extends BoardCard implements IPrice, IRent, IPropertyGroup, Comparable<PropertyCard> {
     private final Integer price;
     private final RentOfCard rentOfCard;
     private final String propertyGroup;
 
     public PropertyCard(UUID id, String title, String description, List<CardHandler> cardHandlers,
                         Integer cardPosition, Integer price, RentOfCard rentOfCard,
-                        String propertyGroup, Player owner) {
+                        String propertyGroup) {
         super(id, title, description, cardHandlers, cardPosition);
         this.price = price;
         this.rentOfCard = rentOfCard;
@@ -48,5 +48,10 @@ public class PropertyCard extends BoardCard implements IPrice, IRent, IPropertyG
     @Override
     public String getGroup() {
         return propertyGroup;
+    }
+
+    @Override
+    public int compareTo(PropertyCard o) {
+        return this.getId().compareTo(o.getId());
     }
 }

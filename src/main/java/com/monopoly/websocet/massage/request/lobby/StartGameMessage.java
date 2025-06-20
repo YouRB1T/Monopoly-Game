@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StartGameMessage extends WebSocketMessageLobby {
+public class StartGameMessage extends ResponseWebSocketMessageLobby {
     private boolean isClassic;
     private Map<String, Object> initialGameState;
 }

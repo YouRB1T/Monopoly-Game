@@ -12,8 +12,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @EqualsAndHashCode
+@RequiredArgsConstructor
 @ToString
 public class GameSession implements Serializable {
     private final UUID id;
@@ -25,5 +25,31 @@ public class GameSession implements Serializable {
     private final Map<String, Object> gameRules;
     private Player currentPlayer;
     private GameStatus status;
+
+    public GameSession(List<Player> players, UUID id, List<Board> boards, Map<String, Object> gameRules,
+                       Map<String, PropertyGroup> propertyGroups) {
+        this.players = players;
+        this.id = id;
+        this.boards = boards;
+        this.gameRules = gameRules;
+        this.propertyGroups = propertyGroups;
+    }
+
+    public GameSession(UUID id, List<Board> boards, List<Player> players,
+                       Map<Player, Integer> playerPosition,
+                       Map<PropertyCard, Player> propertyCardOwners,
+                       Map<String, PropertyGroup> propertyGroups,
+                       Map<String, Object> gameRules, Player currentPlayer,
+                       GameStatus status) {
+        this.id = id;
+        this.boards = boards;
+        this.players = players;
+        this.playerPosition = playerPosition;
+        this.propertyCardOwners = propertyCardOwners;
+        this.propertyGroups = propertyGroups;
+        this.gameRules = gameRules;
+        this.currentPlayer = currentPlayer;
+        this.status = status;
+    }
 }
 

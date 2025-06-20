@@ -1,11 +1,11 @@
 package com.monopoly.mapper;
 
-import com.monopoly.domain.dto.request.DtoHandlerRequest;
-import com.monopoly.domain.dto.request.card.*;
+import com.monopoly.domain.engine.dto.request.DtoHandlerRequest;
 import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.Player;
 import com.monopoly.domain.engine.card.PropertyCard;
 import com.monopoly.domain.engine.card.special.PrisonCard;
+import com.monopoly.domain.engine.dto.request.card.*;
 import com.monopoly.domain.engine.enums.HandleType;
 import com.monopoly.websocet.massage.request.session.RequestGameHandlerMessage;
 import lombok.RequiredArgsConstructor;
