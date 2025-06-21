@@ -11,7 +11,9 @@ import com.monopoly.service.PlayerEntityService;
 import com.monopoly.websocet.massage.request.lobby.*;
 import com.monopoly.websocet.massage.response.lobby.LobbyStateUpdateMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 
@@ -22,6 +24,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class LobbyWebSocketHandler implements WebSocketHandler {
     
@@ -43,14 +46,14 @@ public class LobbyWebSocketHandler implements WebSocketHandler {
     
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
-        // Соединение установлено, но игрок еще не присоединился к лобби
-        // Это произойдет при получении JoinLobbyMessage
+        log.info("New connection established: {}", session.getId());
     }
     
     @Override
-    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+    public void handleMessage(@NonNull WebSocketSession session, @NonNull WebSocketMessage<?> message) throws Exception {
         String payload = ((TextMessage) message).getPayload();
-        ResponseWebSocketMessageLobby requestMessage = objectMapper.readValue(payload, ResponseWebSocketMessageLobby.class);
+        log.info("Received message: {}", payload);
+        RequestWebSocketMessageLobby requestMessage = objectMapper.readValue(payload, RequestWebSocketMessageLobby.class);
         
         if (requestMessage instanceof JoinLobbyMessage) {
             handleJoinLobby(session, (JoinLobbyMessage) requestMessage);
@@ -68,39 +71,31 @@ public class LobbyWebSocketHandler implements WebSocketHandler {
     private void handleJoinLobby(WebSocketSession session, JoinLobbyMessage joinMessage) throws IOException {
         UUID lobbyId = joinMessage.getLobbyId();
         Lobby lobby = lobbyService.getLobbyById(lobbyId);
-        
-        // Проверка пароля, если он установлен
+
         if (lobby.getPassword() != null && !lobby.getPassword().isEmpty()) {
             if (!lobby.getPassword().equals(joinMessage.getPassword())) {
-                sendErrorMessage(session, "Неверный пароль");
+                log.info("Wrong password for lobby: {}", lobbyId);
+                sendErrorMessage(session, "Wrong password");
                 return;
             }
         }
-        
-        // Получаем сущность игрока из базы данных
+
         Optional<PlayerEntity> playerEntityOpt = playerEntityService.getPlayerByNickname(joinMessage.getPlayerName());
         
         if (playerEntityOpt.isEmpty()) {
-            sendErrorMessage(session, "Игрок не найден. Пожалуйста, зарегистрируйтесь.");
+            sendErrorMessage(session, "Don't registered player");
             return;
         }
-        
-        // Преобразуем сущность игрока в игрока для игровой сессии
-        // Используем начальное количество денег из правил лобби или по умолчанию 1500
-        int initialMoney = 1500;
-        if (lobby.getGameRules().containsKey("START_MONEYS")) {
-            initialMoney = (Integer) lobby.getGameRules().get("START_MONEYS");
-        }
-        
-        Player player = playerEntityService.convertToPlayer(playerEntityOpt.get(), initialMoney);
-        
+
+        Player player = playerEntityService.convertToPlayer(playerEntityOpt.get(), 0);
+
         lobby = lobbyService.addPlayerToLobby(lobbyId, player);
         
         lobbySessions.computeIfAbsent(lobbyId, k -> new ConcurrentHashMap<>())
                 .put(session.getId(), session);
         
         sessionPlayers.put(session.getId(), player);
-        
+        log.info("Player {} joined lobby {}", player.getName(), lobbyId);
         broadcastLobbyState(lobby);
     }
     
@@ -205,11 +200,13 @@ public class LobbyWebSocketHandler implements WebSocketHandler {
     }
     
     private void broadcastLobbyState(Lobby lobby) throws JsonProcessingException {
+        log.info("Broadcasting lobby state: {}", lobby);
         Map<String, WebSocketSession> sessions = lobbySessions.get(lobby.getId());
         if (sessions != null) {
             LobbyStateUpdateMessage stateMessage = new LobbyStateUpdateMessage();
             stateMessage.setLobbyId(lobby.getId());
             stateMessage.setLobby(lobby);
+            log.info("Lobby state: {}", stateMessage);
             
             for (WebSocketSession session : sessions.values()) {
                 if (session.isOpen()) {
@@ -222,10 +219,11 @@ public class LobbyWebSocketHandler implements WebSocketHandler {
     private void sendMessage(WebSocketSession session, Object message) throws JsonProcessingException {
         if (session.isOpen()) {
             try {
+                log.info("Sending message: {}", message);
                 String json = objectMapper.writeValueAsString(message);
                 session.sendMessage(new TextMessage(json));
             } catch (IOException e) {
-                // Логирование ошибки
+                log.error("Error sending message: {}", e.getMessage());
             }
         }
     }
@@ -238,15 +236,14 @@ public class LobbyWebSocketHandler implements WebSocketHandler {
     
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) {
-        // Обработка ошибок транспорта
+        log.error("Transport error: {}", exception.getMessage());
     }
     
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        // Находим игрока и лобби
+        log.info("Connection closed: {}", session.getId());
         Player player = sessionPlayers.remove(session.getId());
         if (player != null) {
-            // Ищем лобби, в котором был игрок
             for (Map.Entry<UUID, Map<String, WebSocketSession>> entry : lobbySessions.entrySet()) {
                 UUID lobbyId = entry.getKey();
                 Map<String, WebSocketSession> sessions = entry.getValue();
@@ -255,24 +252,23 @@ public class LobbyWebSocketHandler implements WebSocketHandler {
                     sessions.remove(session.getId());
                     
                     try {
-                        // Удаляем игрока из лобби
+                        log.info("Removing player from lobby: {}", player.getName());
                         Lobby lobby = lobbyService.removePlayerFromLobby(lobbyId, player.getId());
-                        
-                        // Если это был создатель и есть другие игроки, назначаем нового создателя
+
                         if (lobby.getCreator().getId().equals(player.getId()) && !lobby.getPlayers().isEmpty()) {
                             lobby = lobbyService.assignNewCreator(lobbyId, lobby.getPlayers().get(0).getId());
+                            log.info("New creator assigned: {}", lobby.getCreator().getName());
+                            broadcastLobbyState(lobby);
                         }
-                        
-                        // Если игроков не осталось, закрываем лобби
+
                         if (lobby.getPlayers().isEmpty()) {
                             lobbyService.closeLobby(lobbyId);
                             lobbySessions.remove(lobbyId);
                         } else {
-                            // Иначе отправляем обновление оставшимся игрокам
                             broadcastLobbyState(lobby);
                         }
                     } catch (Exception e) {
-                        // Логирование ошибки
+                        log.error("Error removing player from lobby: {}", e.getMessage());
                     }
                     
                     break;

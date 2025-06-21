@@ -8,12 +8,14 @@ import com.monopoly.domain.engine.card.ChanceCard;
 import com.monopoly.service.PrisonService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 @Component
 @Setter
 @RequiredArgsConstructor
@@ -37,11 +39,11 @@ public class ChanceHandler implements CardHandler<DtoChanceHandlerResponse, DtoC
         switch (chanceCard.getType()) {
             case GO_TO_PRISON:
                 prisonService.sandToPrison(player, gameSession);
-                System.out.println("Игрок " + player.getName() + " отправлен в тюрьму");
+                log.info("Player " + player.getName() + " go to prison by card " + chanceCard.getTitle() + " session " + gameSession.getId());
                 break;
             case FREE_PRISON_CARD:
                 prisonService.giveFreePrisonCard(player);
-                System.out.println("Игрок " + player.getName() + " получил карту освобождения из тюрьмы");
+                log.info("Player " + player.getName() + " get free prison card by card " + chanceCard.getTitle() + " session " + gameSession.getId());
                 break;
         }
 

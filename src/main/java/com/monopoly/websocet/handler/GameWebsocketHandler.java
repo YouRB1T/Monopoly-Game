@@ -11,6 +11,7 @@ import com.monopoly.websocet.massage.request.session.RequestGameHandlerMessage;
 import com.monopoly.websocet.massage.response.sessoin.ResponseGameHandlerMessage;
 import com.monopoly.websocet.massage.response.sessoin.ResponseWebSocketMessageSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
@@ -21,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class GameWebsocketHandler implements WebSocketHandler {
     @Autowired
     private ObjectMapper objectMapper;
@@ -44,11 +46,11 @@ public class GameWebsocketHandler implements WebSocketHandler {
 
         RequestGameHandlerMessage requestMessage =
                 objectMapper.readValue(json, RequestGameHandlerMessage.class);
-
+        log.info("Received message: {}", requestMessage);
         DtoHandlerRequest dtoRequest = messageMapper.mapToRequest(requestMessage);
 
         DtoHandlerResponse dtoResponse = gameSessionEngineService.handleGameEvent(dtoRequest);
-
+        log.info("Received message: {}", dtoResponse);
         ResponseGameHandlerMessage response = dtoMapper.mapToResponseHandlerMessage(dtoResponse, (RequestGameHandlerMessage) message);
 
         broadcastToAll(response);
@@ -56,6 +58,7 @@ public class GameWebsocketHandler implements WebSocketHandler {
 
     protected void broadcastToAll(ResponseWebSocketMessageSession response) throws JsonProcessingException {
         String jsonResponse = objectMapper.writeValueAsString(response);
+        log.info("Sending message: {}", jsonResponse);
         for (WebSocketSession session : sessions) {
             if (session.isOpen()) {
                 try {
@@ -68,11 +71,12 @@ public class GameWebsocketHandler implements WebSocketHandler {
 
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) {
-        // обработка ошибок
+        log.error("Transport error: {}", exception.getMessage());
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+        log.info("Connection closed: {}", status.getReason());
         sessions.remove(session);
     }
 

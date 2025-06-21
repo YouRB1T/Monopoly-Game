@@ -26,7 +26,7 @@ public class GoPrisonHandler implements CardHandler<DtoGoPrisonResponse, DtoGoPr
         PrisonCard prisonCard = (PrisonCard) request.getPrisonCard();
 
         prisonService.sandToPrison(player, gameSession);
-        log("Игрок " + player.getName() + " отправлен в тюрьму картой " + prisonCard.getTitle());
+        log.info("Player " + player.getName() + " go to prison by card " + prisonCard.getTitle() + " session " + gameSession.getId());
         return new DtoGoPrisonResponse(gameSession, player, prisonCard);
     }
 

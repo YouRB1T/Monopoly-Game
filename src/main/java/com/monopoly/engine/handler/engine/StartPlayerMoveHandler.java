@@ -22,6 +22,7 @@ public class StartPlayerMoveHandler implements EngineHandler<DtoStartPlayerMoveR
         Integer[] result = gameSessionService.rollDice();
         gameSessionService.movePlayerToPosition(gameSession, player,
                 result[0] + result[1]);
+        log.info("Player " + player.getName() + " rolled " + result[0] + " and " + result[1] + " session " + gameSession.getId());
         return new DtoStartPlayerMoveResponse(gameSession, result[0], result[1]);
     }
 

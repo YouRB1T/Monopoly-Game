@@ -18,12 +18,10 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        // Регистрируем обработчик для игровых сессий
         registry.addHandler(gameHandler, "/game/session/{sessionId}")
                 .setAllowedOrigins("*")
                 .withSockJS();
-        
-        // Регистрируем обработчик для лобби
+
         registry.addHandler(lobbyHandler, "/game//lobby/{lobbyId}")
                 .setAllowedOrigins("*")
                 .withSockJS();

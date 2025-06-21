@@ -28,6 +28,7 @@ public class TreasuryHandler implements CardHandler<DtoTreasuryHandlerResponse, 
 
         List<TreasuryCard> treasuryCards = gameSession.getBoards().get(0).getTreasuryCards();
         if (treasuryCards.isEmpty()) {
+            log.info("No treasury cards" + " session " + gameSession.getId());
             return new DtoTreasuryHandlerResponse(gameSession, player, null);
         }
 
@@ -35,12 +36,14 @@ public class TreasuryHandler implements CardHandler<DtoTreasuryHandlerResponse, 
 
         switch (treasuryCard.getType()) {
             case MONEY_REWARD:
+                log.info("Player " + player.getName() + " get " + treasuryCard.getValue() +
+                        " by card " + treasuryCard.getTitle() + " session " + gameSession.getId());
                 playerService.addMoneys(player, treasuryCard.getValue());
-                System.out.println("Игрок " + player.getName() + " получил " + treasuryCard.getValue() + " денег");
                 break;
             case MONEY_PENALTY:
+                log.info("Player " + player.getName() + " pay " + treasuryCard.getValue() +
+                        " by card " + treasuryCard.getTitle() + " session " + gameSession.getId());
                 playerService.subMoneys(player, treasuryCard.getValue());
-                System.out.println("Игрок " + player.getName() + " заплатил штраф " + treasuryCard.getValue());
                 break;
         }
 

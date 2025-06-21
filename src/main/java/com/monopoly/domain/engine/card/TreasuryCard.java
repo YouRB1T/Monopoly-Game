@@ -17,9 +17,10 @@ public class TreasuryCard extends Card implements ITreasury{
     private TreasuryCardType type;
     private Integer value;
 
-    public TreasuryCard(UUID id, String title, String description, TreasuryCardType type) {
+    public TreasuryCard(UUID id, String title, String description, TreasuryCardType type, Integer value) {
         super(id, title, description);
         this.type = type;
+        this.value = value;
     }
 
     @Override

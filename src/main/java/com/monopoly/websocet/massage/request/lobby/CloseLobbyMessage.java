@@ -5,6 +5,6 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CloseLobbyMessage extends ResponseWebSocketMessageLobby {
+public class CloseLobbyMessage extends RequestWebSocketMessageLobby {
     private String reason;
 }

@@ -22,7 +22,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = LobbyStateUpdateMessage.class, name = "LOBBY_STATE_UPDATE"),
         @JsonSubTypes.Type(value = ErrorMessage.class, name = "ERROR")
 })
-public abstract class ResponseWebSocketMessageLobby extends WebSocketMessage {
+public abstract class RequestWebSocketMessageLobby extends WebSocketMessage {
     private UUID lobbyId;
 }
 

@@ -29,19 +29,21 @@ public class SaleCardHandler implements CardHandler<DtoSaleCardResponse, DtoSale
         Integer price = request.getPrice();
 
         if (!propertyCardService.getPropertyOwner(gameSession, propertyCard).equals(oldOwner)) {
-            throw new IllegalStateException("Игрок не владеет данной картой");
+            log.info("Player is not owner of property" + " session " + gameSession.getId());
+            throw new IllegalStateException("Player is not owner of property");
         }
 
         if (newOwner.getMoneys() < price) {
-            throw new IllegalStateException("У покупателя недостаточно средств");
+            log.info("Buyer has not enough money" + " session " + gameSession.getId());
+            throw new IllegalStateException("Buyer has not enough money");
         }
 
         gameSessionService.transferMoney(newOwner, oldOwner, price);
 
         propertyCardService.transferProperty(gameSession, propertyCard, oldOwner, newOwner);
 
-        System.out.println("Игрок " + newOwner.getName() + " купил карту " + propertyCard.getTitle() +
-                " у игрока " + oldOwner.getName() + " за " + price);
+        log.info("Player " + newOwner.getName() + " bought property " + propertyCard.getTitle() +
+                " from " + oldOwner.getName() + " for " + price + " session " + gameSession.getId());
 
         return new DtoSaleCardResponse(gameSession, oldOwner, newOwner, propertyCard, price);
     }

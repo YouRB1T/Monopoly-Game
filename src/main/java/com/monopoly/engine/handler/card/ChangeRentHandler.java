@@ -6,9 +6,11 @@ import com.monopoly.domain.engine.GameSession;
 import com.monopoly.domain.engine.card.PropertyCard;
 import com.monopoly.service.PropertyCardService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @Setter
 public class ChangeRentHandler implements CardHandler<DtoChangeRentResponse, DtoChangeRentRequest>{
@@ -22,15 +24,14 @@ public class ChangeRentHandler implements CardHandler<DtoChangeRentResponse, Dto
         Integer newRentLevel = request.getNewRentLevel();
 
         if (!propertyCardService.isPropertyOwned(gameSession, propertyCard)) {
-            throw new IllegalStateException("Собственность никому не принадлежит");
+            throw new IllegalStateException("Property is not owned");
         }
 
         propertyCard.getRentOfCard().setCurrentRentLevel(newRentLevel);
         propertyCard.getRentOfCard().setCurrentRent(
                 propertyCard.getRentOfCard().getRentLevels().get(newRentLevel));
 
-        System.out.println("Уровень аренды для карты " + propertyCard.getTitle() +
-                " изменен на " + newRentLevel);
+        log.info("Rent of property " + propertyCard.getTitle() + " changed to " + newRentLevel);
 
         return new DtoChangeRentResponse(gameSession, propertyCard, newRentLevel);
     }

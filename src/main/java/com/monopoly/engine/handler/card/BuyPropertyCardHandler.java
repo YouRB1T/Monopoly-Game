@@ -8,12 +8,14 @@ import com.monopoly.domain.engine.card.*;
 import com.monopoly.service.PropertyCardService;
 import com.monopoly.service.PlayerService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 @Setter
 public class BuyPropertyCardHandler implements CardHandler<DtoBuyPropertyResponse, DtoBuyPropertyRequest>{
@@ -30,12 +32,15 @@ public class BuyPropertyCardHandler implements CardHandler<DtoBuyPropertyRespons
         PropertyCard card = request.getCard();
         GameSession gameSession = request.getGameSession();
 
+        log.info("Player " + player.getName() + " buying card " + card.getTitle() + " session " + gameSession.getId());
         if (propertyCardService.isPropertyOwned(gameSession, card)) {
-            throw new IllegalStateException("Карта уже принадлежит другому игроку");
+            log.info("Card already owned" + " session " + gameSession.getId());
+            throw new IllegalStateException("Card already owned");
         }
 
         if (player.getMoneys() < card.getPrice()) {
-            throw new IllegalStateException("Недостаточно средств для покупки карты");
+            log.info("Not enough money" + " session " + gameSession.getId());
+            throw new IllegalStateException("Not enough money");
         }
 
         playerService.subMoneys(player, card.getPrice());
@@ -43,6 +48,7 @@ public class BuyPropertyCardHandler implements CardHandler<DtoBuyPropertyRespons
         gameSession.getPropertyCardOwners().put(card, player);
         updated.add(card);
         if (hasPropertyGroup(player, gameSession.getPropertyGroups().get(card.getGroup()))) {
+            log.info("Player has property group" + " session " + gameSession.getId());
             appLevelForGroup(gameSession, card.getGroup(), updated);
         }
 
@@ -74,6 +80,7 @@ public class BuyPropertyCardHandler implements CardHandler<DtoBuyPropertyRespons
     private void appLevelForGroup(GameSession gameSession, String group, List<Card> updated) {
         gameSession.getPropertyGroups().get(group).getPropertyCards().stream().forEach(propertyCard -> {
             if (propertyCard.getCurrentRent() < 3) {
+                log.info("Upgrading property " + propertyCard.getTitle() + " to level 3" + " session " + gameSession.getId());
                 propertyCard.setCurrentRentLevel(3);
                 updated.add(propertyCard);
             }

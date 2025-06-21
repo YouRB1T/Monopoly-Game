@@ -5,6 +5,6 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UpdateLobbyPasswordMessage extends ResponseWebSocketMessageLobby {
+public class UpdateLobbyPasswordMessage extends RequestWebSocketMessageLobby {
     private String newPassword;
 }

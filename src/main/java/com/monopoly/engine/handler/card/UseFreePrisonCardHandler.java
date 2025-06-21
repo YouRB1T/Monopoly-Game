@@ -24,15 +24,19 @@ public class UseFreePrisonCardHandler implements CardHandler<DtoUseFreePrisonCar
         GameSession gameSession = request.getGameSession();
 
         if (!prisonService.isInPrison(player, card)) {
-            throw new IllegalStateException("Игрок не находится в тюрьме");
+            log.info("Player is not in prison" + " session " + gameSession.getId());
+            throw new IllegalStateException("Player is not in prison");
         }
 
         if (!prisonService.canUseFreePrisonCard(player)) {
-            throw new IllegalStateException("У игрока нет карт освобождения из тюрьмы");
+            log.info("Player has no free prison cards" + " session " + gameSession.getId());
+            throw new IllegalStateException("Player has no free prison cards");
         }
 
         player.setFreePrisonCards(player.getFreePrisonCards() - 1);
         prisonService.releaseFromPrison(player, gameSession);
+
+        log.info("Player " + player.getName() + " used free prison card" + " session " + gameSession.getId());
 
         return new DtoUseFreePrisonCardResponse(gameSession, player, card);
 

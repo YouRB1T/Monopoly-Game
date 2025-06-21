@@ -27,7 +27,7 @@ public class Lobby implements Serializable {
         this.name = name;
         this.creator = creator;
         this.players = new ArrayList<>();
-        this.players.add(creator); // Добавляем создателя в список игроков
+        this.players.add(creator);
         this.gameRules = gameRules;
         this.maxPlayers = maxPlayers;
         this.password = password;

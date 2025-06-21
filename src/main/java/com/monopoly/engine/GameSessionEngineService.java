@@ -23,7 +23,7 @@ public class GameSessionEngineService implements GameSessionEngine {
 
     @Override
     public DtoHandlerResponse handleGameEvent(DtoHandlerRequest request) {
-        handlerMap = requestToClassMapper.handlerMap()
+        handlerMap = requestToClassMapper.handlerMap();
         CardHandler<?, ?> handler = handlerMap.get(request.getClass());
 
         if (handler == null) {

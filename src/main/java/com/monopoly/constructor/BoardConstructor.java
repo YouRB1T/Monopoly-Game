@@ -6,6 +6,8 @@ import com.monopoly.domain.engine.card.ChanceCard;
 import com.monopoly.domain.engine.card.PropertyCard;
 import com.monopoly.domain.engine.card.TreasuryCard;
 import com.monopoly.domain.engine.card.RentOfCard;
+import com.monopoly.domain.engine.enums.ChanceCardType;
+import com.monopoly.domain.engine.enums.TreasuryCardType;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -69,9 +71,9 @@ public class BoardConstructor {
         List<ChanceCard> chanceCards = new ArrayList<>();
         
         // Добавляем карты шанса
-        chanceCards.add(new ChanceCard(UUID.randomUUID(), "Банковская ошибка в вашу пользу", "Получите 200$", 200));
-        chanceCards.add(new ChanceCard(UUID.randomUUID(), "Штраф за превышение скорости", "Заплатите 15$", -15));
-        chanceCards.add(new ChanceCard(UUID.randomUUID(), "Выигрыш в лотерею", "Получите 100$", 100));
+        chanceCards.add(new ChanceCard(UUID.randomUUID(), "Банковская ошибка в вашу пользу", "Получите 200$", ChanceCardType.GO_TO_PRISON));
+        chanceCards.add(new ChanceCard(UUID.randomUUID(), "Штраф за превышение скорости", "Заплатите 15$", ChanceCardType.FREE_PRISON_CARD));
+        chanceCards.add(new ChanceCard(UUID.randomUUID(), "Выигрыш в лотерею", "Получите 100$", ChanceCardType.FREE_PRISON_CARD));
         // Добавьте остальные карты шанса
         
         return chanceCards;
@@ -85,9 +87,9 @@ public class BoardConstructor {
         List<TreasuryCard> treasuryCards = new ArrayList<>();
         
         // Добавляем карты казны
-        treasuryCards.add(new TreasuryCard(UUID.randomUUID(), "Возврат налога", "Получите 20$", 20));
-        treasuryCards.add(new TreasuryCard(UUID.randomUUID(), "Оплата страховки", "Заплатите 50$", -50));
-        treasuryCards.add(new TreasuryCard(UUID.randomUUID(), "Наследство", "Получите 100$", 100));
+        treasuryCards.add(new TreasuryCard(UUID.randomUUID(), "Возврат налога", "Получите 20$", TreasuryCardType.MONEY_REWARD, 20));
+        treasuryCards.add(new TreasuryCard(UUID.randomUUID(), "Оплата страховки", "Заплатите 50$", TreasuryCardType.MONEY_PENALTY, 50));
+        treasuryCards.add(new TreasuryCard(UUID.randomUUID(), "Наследство", "Получите 100$", TreasuryCardType.MONEY_REWARD, 100));
         // Добавьте остальные карты казны
         
         return treasuryCards;
@@ -156,7 +158,6 @@ public class BoardConstructor {
      * @return Карта собственности
      */
     private PropertyCard createPropertyCard(String title, int price, int baseRent, String group, int position) {
-        // Создаем уровни ренты
         Map<Integer, Integer> rentLevels = new HashMap<>();
         rentLevels.put(0, baseRent);
         rentLevels.put(1, baseRent * 5);

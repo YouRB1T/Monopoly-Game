@@ -17,6 +17,8 @@ public class StartCardMoveHandler implements CardHandler<DtoStartCardMoveRespons
     @Override
     public DtoStartCardMoveResponse handle(DtoStartCardMoveRequest request) {
         playerService.addMoneys(request.getPlayer(), request.getRewordForCircle());
+        log.info("Player " + request.getPlayer().getName() + " get " + request.getRewordForCircle() +
+                " for circle " + " session " + request.getGameSession().getId());
         return new DtoStartCardMoveResponse(request.getGameSession(), request.getPlayer(),
                 request.getRewordForCircle());
     }

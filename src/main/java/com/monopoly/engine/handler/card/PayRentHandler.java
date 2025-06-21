@@ -35,8 +35,8 @@ public class PayRentHandler implements CardHandler<DtoPayRentResponse, DtoPayRen
         Integer rent = propertyCardService.calculateRent(propertyCard);
         gameSessionService.transferMoney(player, owner, rent);
 
-        log("Игрок " + player.getName() + " заплатил аренду " + rent +
-                " игроку " + owner.getName() + " за карту " + propertyCard.getTitle());
+        log.info("Player " + player.getName() + " paid rent " + rent +
+                " to player " + owner.getName() + " for property " + propertyCard.getTitle() + " session " + gameSession.getId());
         return new DtoPayRentResponse(gameSession, player, propertyCard, owner, rent);
     }
 

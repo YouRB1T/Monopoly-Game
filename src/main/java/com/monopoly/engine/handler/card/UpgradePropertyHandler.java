@@ -21,12 +21,12 @@ public class UpgradePropertyHandler implements CardHandler<DtoUpgradePropertyRes
         Integer newLevel = request.getNewLevel();
 
         if (!propertyCardService.canUpgradeProperty(propertyCard, newLevel)) {
-            throw new IllegalStateException("Карта не может быть улучшена");
+            log.info("Card can't be upgraded" + " session " + request.getGameSession().getId());
+            throw new IllegalStateException("Card can't be upgraded");
         }
 
         propertyCardService.upgradeProperty(propertyCard, newLevel);
-
-        log.debug("Карта " + propertyCard.getTitle() + " была улучшена до уровня" + newLevel);
+        log.info("Card upgraded" + " session " + request.getGameSession().getId());
 
         return new DtoUpgradePropertyResponse(request.getGameSession(), propertyCard, newLevel);
     }
