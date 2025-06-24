@@ -2,35 +2,46 @@ package com.monopoly.service;
 
 import com.monopoly.domain.engine.Lobby;
 import com.monopoly.domain.engine.Player;
-import com.monopoly.dto.request.CreateLobbyRequest;
+import com.monopoly.domain.engine.dto.request.lobby.CreateLobbyRequest;
+import com.monopoly.domain.entity.PlayerEntity;
 import com.monopoly.repository.LobbyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class LobbyService {
     
-    private final LobbyRepository lobbyRepository;
+    @Autowired
+    private LobbyRepository lobbyRepository;
     
+    @Autowired
+    private PlayerEntityService playerEntityService;
+
     public Lobby createLobby(CreateLobbyRequest request) {
         UUID lobbyId = UUID.randomUUID();
         
         Lobby lobby = new Lobby(
                 lobbyId,
                 request.getLobbyName(),
-                request.getCreator(),
+                playerEntityService.convertToPlayer(request.getCreator(), 0),
                 request.getGameRules(),
                 request.getMaxPlayers(),
                 request.getPassword()
         );
         log.info("Created lobby: {}", lobby);
         return lobbyRepository.create(lobby);
+    }
+
+    public List<Lobby> getAllLobbies() {
+        log.info("Getting all lobbies");
+        return lobbyRepository.findAll();
     }
     
     public Lobby getLobbyById(UUID lobbyId) {
@@ -83,4 +94,35 @@ public class LobbyService {
         log.info("Assigned new creator to lobby: {}", newCreatorId);
         return lobbyRepository.update(lobby);
     }
+
+    public Lobby joinLobby(UUID lobbyId, String playerName, String password) {
+        Lobby lobby = getLobbyById(lobbyId);
+        
+        if (lobby.getPlayers().size() >= lobby.getMaxPlayers()) {
+            throw new IllegalStateException("Lobby is full");
+        }
+        
+        // Check password if required
+        if (lobby.getPassword() != null && !lobby.getPassword().isEmpty()) {
+            if (!lobby.getPassword().equals(password)) {
+                throw new IllegalArgumentException("Invalid password");
+            }
+        }
+        
+        // Get player entity
+        Optional<PlayerEntity> playerEntityOpt = playerEntityService.getPlayerByNickname(playerName);
+        if (playerEntityOpt.isEmpty()) {
+            throw new IllegalArgumentException("Player not registered");
+        }
+        
+        // Convert to Player and check if already in lobby
+        Player player = playerEntityService.convertToPlayer(playerEntityOpt.get(), 0);
+        if (lobby.getPlayers().stream().anyMatch(p -> p.getId().equals(player.getId()))) {
+            throw new IllegalStateException("Player already in lobby");
+        }
+        
+        // Add player to lobby
+        return addPlayerToLobby(lobbyId, player);
+    }
+
 }

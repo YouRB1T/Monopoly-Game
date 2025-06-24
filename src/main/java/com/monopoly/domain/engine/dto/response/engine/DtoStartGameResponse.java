@@ -11,9 +11,4 @@ import java.util.List;
 public class DtoStartGameResponse implements IDtoEngineHandlerResponse{
     private GameSession gameSession;
     private List<String> executedHandlers;
-
-    @Override
-    public GameSession getGameSession() {
-        return gameSession;
-    }
 }

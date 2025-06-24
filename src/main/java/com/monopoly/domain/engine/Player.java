@@ -19,9 +19,9 @@ public class Player implements Id, Prisoned {
     private Integer totalMoneys;
     private final Set<Card> playerCards;
     private boolean inPrison;
-    private Integer comboTimes;
-    private Integer prisonTurns;
-    private Integer freePrisonCards;
+    private Integer comboTimes = 0;
+    private Integer prisonTurns = 0;
+    private Integer freePrisonCards = 0;
 
     public Player(UUID id, Integer moneys, Set<Card> playerCards) {
         this.id = id;

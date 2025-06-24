@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
 @Getter
@@ -22,7 +23,7 @@ public class EndGameHandler implements EngineHandler<DtoEndGameResponse, DtoEndG
                .max(Comparator.comparingInt(Player::getTotalMoneys))
                .orElse(null);
         log.info("Game ended. Winner: " + winner.getName() + " session " + gameSession.getId());
-        return new DtoEndGameResponse(gameSession, winner);
+        return new DtoEndGameResponse(gameSession, winner, new ArrayList<>());
     }
 
     @Override

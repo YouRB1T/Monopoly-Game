@@ -12,14 +12,11 @@ import java.util.List;
 public class DtoEndGameResponse implements IDtoEngineHandlerResponse{
     private GameSession gameSession;
     private Player winner;
+    private List<String> executedHandlers;
 
     @Override
     public List<String> getExecutedHandlers() {
-        return List.of("END_GAME");
-    }
-
-    @Override
-    public GameSession getGameSession() {
-        return null;
+        executedHandlers.add("END_GAME");
+        return executedHandlers;
     }
 }

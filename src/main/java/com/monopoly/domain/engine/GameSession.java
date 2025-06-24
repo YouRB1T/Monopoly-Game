@@ -3,6 +3,9 @@ package com.monopoly.domain.engine;
 import com.monopoly.domain.engine.card.PropertyCard;
 import com.monopoly.domain.engine.card.PropertyGroup;
 import com.monopoly.domain.engine.enums.GameStatus;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 
 import java.io.Serializable;
@@ -24,6 +27,8 @@ public class GameSession implements Serializable {
     private final Map<String, PropertyGroup> propertyGroups;
     private final Map<String, Object> gameRules;
     private Player currentPlayer;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private GameStatus status;
 
     public GameSession(List<Player> players, UUID id, List<Board> boards, Map<String, Object> gameRules,

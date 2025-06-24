@@ -2,6 +2,7 @@ package com.monopoly.repository;
 
 import com.monopoly.domain.engine.Lobby;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,4 +12,5 @@ public interface LobbyRepository {
     Lobby update(Lobby lobby);
     Lobby deleteById(UUID id);
     boolean existsById(UUID id);
+    List<Lobby> findAll();
 }

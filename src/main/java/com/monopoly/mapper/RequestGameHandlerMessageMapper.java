@@ -7,7 +7,7 @@ import com.monopoly.domain.engine.card.PropertyCard;
 import com.monopoly.domain.engine.card.special.PrisonCard;
 import com.monopoly.domain.engine.dto.request.card.*;
 import com.monopoly.domain.engine.enums.HandleType;
-import com.monopoly.websocet.massage.request.session.RequestGameHandlerMessage;
+import com.monopoly.websocket.message.request.session.RequestGameHandlerMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

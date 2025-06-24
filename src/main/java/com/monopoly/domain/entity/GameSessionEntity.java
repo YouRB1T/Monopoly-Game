@@ -14,7 +14,7 @@ public class GameSessionEntity  {
     @Id
     private UUID id;
 
-    @Column(name = "session_data", columnDefinition = "game_session_type")
+    @Column(name = "session_data")
     @Convert(converter = GameSessionTypeConverter.class)
     private GameSession sessionData;
 

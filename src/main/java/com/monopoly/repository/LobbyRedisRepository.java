@@ -4,8 +4,8 @@ import com.monopoly.domain.engine.Lobby;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class LobbyRedisRepository implements LobbyRepository {
@@ -53,5 +53,18 @@ public class LobbyRedisRepository implements LobbyRepository {
     public boolean existsById(UUID id) {
         String key = buildKey(id);
         return Boolean.TRUE.equals(redisTemplate.hasKey(key));
+    }
+
+    @Override
+    public List<Lobby> findAll() {
+        Set<String> keys = redisTemplate.keys(KEY_PREFIX + "*");
+        if (keys == null || keys.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return keys.stream()
+                .map(key -> redisTemplate.opsForValue().get(key))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 }

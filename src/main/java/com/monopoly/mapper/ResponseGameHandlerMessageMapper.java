@@ -1,12 +1,14 @@
 package com.monopoly.mapper;
 
 import com.monopoly.domain.engine.dto.response.DtoHandlerResponse;
-import com.monopoly.websocet.massage.request.session.RequestGameHandlerMessage;
-import com.monopoly.websocet.massage.response.sessoin.ResponseGameHandlerMessage;
+import com.monopoly.websocket.message.request.session.RequestGameHandlerMessage;
+import com.monopoly.websocket.message.response.sessoin.ResponseGameHandlerMessage;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class ResponseGameHandlerMessageMapper {
 
     public ResponseGameHandlerMessage mapToResponseHandlerMessage(DtoHandlerResponse response, RequestGameHandlerMessage message) {

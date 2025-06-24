@@ -14,18 +14,16 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import java.util.UUID;
-
 @Configuration
 public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(); //localhost:6379
+        return new LettuceConnectionFactory();
     }
 
     @Bean
-    public RedisTemplate<String, GameSession> redisTemplate(RedisConnectionFactory connectionFactory) {
+    public RedisTemplate<String, GameSession> sessionRedisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, GameSession> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
