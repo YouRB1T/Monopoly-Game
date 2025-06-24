@@ -20,11 +20,11 @@ public class GameSessionTypeConverter implements AttributeConverter<GameSession,
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new JavaTimeModule());
         this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        // Добавляем обработку циклических ссылок
+
         this.objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        // Настройка для обработки циклических ссылок
+
         this.objectMapper.configure(SerializationFeature.WRITE_SELF_REFERENCES_AS_NULL, true);
     }
 

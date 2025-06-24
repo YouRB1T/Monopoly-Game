@@ -7,17 +7,15 @@ import lombok.*;
 import java.util.Set;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
+@NoArgsConstructor
 public class Player implements Id, Prisoned {
-    private final UUID id;
+    private UUID id;
     private String name;
     private Integer moneys;
     private Integer totalMoneys;
-    private final Set<Card> playerCards;
+    private Set<Card> playerCards;
     private boolean inPrison;
     private Integer comboTimes = 0;
     private Integer prisonTurns = 0;

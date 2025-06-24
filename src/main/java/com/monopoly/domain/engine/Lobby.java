@@ -1,8 +1,10 @@
 package com.monopoly.domain.engine;
 
 import com.monopoly.domain.engine.enums.LobbyStatus;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,8 +14,10 @@ import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 public class Lobby implements Serializable {
-    private final UUID id;
+    private UUID id;  // убираем final
     private String name;
     private Player creator;
     private List<Player> players;

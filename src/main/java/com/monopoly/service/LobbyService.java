@@ -101,27 +101,23 @@ public class LobbyService {
         if (lobby.getPlayers().size() >= lobby.getMaxPlayers()) {
             throw new IllegalStateException("Lobby is full");
         }
-        
-        // Check password if required
+
         if (lobby.getPassword() != null && !lobby.getPassword().isEmpty()) {
             if (!lobby.getPassword().equals(password)) {
                 throw new IllegalArgumentException("Invalid password");
             }
         }
-        
-        // Get player entity
+
         Optional<PlayerEntity> playerEntityOpt = playerEntityService.getPlayerByNickname(playerName);
         if (playerEntityOpt.isEmpty()) {
             throw new IllegalArgumentException("Player not registered");
         }
-        
-        // Convert to Player and check if already in lobby
+
         Player player = playerEntityService.convertToPlayer(playerEntityOpt.get(), 0);
         if (lobby.getPlayers().stream().anyMatch(p -> p.getId().equals(player.getId()))) {
             throw new IllegalStateException("Player already in lobby");
         }
-        
-        // Add player to lobby
+
         return addPlayerToLobby(lobbyId, player);
     }
 
