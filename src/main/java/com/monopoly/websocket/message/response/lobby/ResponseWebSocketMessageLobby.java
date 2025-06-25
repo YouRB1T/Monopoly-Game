@@ -2,6 +2,7 @@ package com.monopoly.websocket.message.response.lobby;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.monopoly.websocket.message.WebSocketMessage;
 import lombok.Data;
 
 @JsonTypeInfo(
@@ -17,6 +18,6 @@ import lombok.Data;
         @JsonSubTypes.Type(value = GameStartedMessage.class, name = "GAME_STARTED")
 })
 @Data
-public abstract class ResponseWebSocketMessageLobby {
+public abstract class ResponseWebSocketMessageLobby extends WebSocketMessage {
     private String type;
 }

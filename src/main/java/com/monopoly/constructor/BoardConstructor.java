@@ -15,21 +15,14 @@ import java.util.*;
 @Component
 public class BoardConstructor {
     
-    /**
-     * Создает классическую доску Монополии
-     * @return Игровая доска с классическим набором карточек
-     */
+
     public Board createClassicBoard() {
-        // Создаем карты шанса
         List<ChanceCard> chanceCards = createChanceCards();
-        
-        // Создаем карты казны
+
         List<TreasuryCard> treasuryCards = createTreasuryCards();
-        
-        // Создаем карты на доске
+
         List<BoardCard> cardsOnBoard = createClassicBoardCards();
-        
-        // Создаем доску с размером 40 клеток (классическая Монополия)
+
         return new Board(
                 UUID.randomUUID(),
                 chanceCards,

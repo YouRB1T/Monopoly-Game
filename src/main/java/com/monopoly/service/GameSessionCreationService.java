@@ -33,8 +33,8 @@ public class GameSessionCreationService {
                 boards,
                 new ArrayList<>(lobby.getPlayers()),
                 playerPositions,
-                new HashMap<>(), // propertyCardOwners
-                new HashMap<>(), // propertyGroups
+                new HashMap<>(),
+                new HashMap<>(),
                 lobby.getGameRules(),
                 null,
                 GameStatus.ACTIVE

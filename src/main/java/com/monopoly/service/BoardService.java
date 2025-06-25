@@ -17,20 +17,7 @@ public class BoardService {
     public BoardService(BoardConstructor boardConstructor) {
         this.boardConstructor = boardConstructor;
     }
-    
-    /**
-     * Создает стандартный набор досок
-     * @return Список игровых досок
-     */
-    public List<Board> createBoards() {
-        return createBoards(true); // По умолчанию создаем классическую доску
-    }
-    
-    /**
-     * Создает набор досок в зависимости от типа игры
-     * @param isClassic флаг, указывающий создавать ли классическую доску
-     * @return Список игровых досок
-     */
+
     public List<Board> createBoards(boolean isClassic) {
         List<Board> boards = new ArrayList<>();
         

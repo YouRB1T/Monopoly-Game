@@ -2,6 +2,7 @@ package com.monopoly.websocket.message.request.lobby;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.monopoly.websocket.message.WebSocketMessage;
 import lombok.Data;
 
 @JsonTypeInfo(
@@ -16,7 +17,7 @@ import lombok.Data;
         @JsonSubTypes.Type(value = UpdateLobbyPasswordMessage.class, name = "UPDATE_PASSWORD")
 })
 @Data
-public abstract class RequestWebSocketMessageLobby {
+public abstract class RequestWebSocketMessageLobby extends WebSocketMessage {
     private String type;
 }
 
